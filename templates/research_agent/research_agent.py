@@ -2,101 +2,19 @@
 Research Agent Template
 
 This template provides a specialized agent for research tasks.
+It leverages the built-in tools from the Metis Agent framework.
 """
 import os
-from metis_agent import SingleAgent, BaseTool, register_tool
-
-class ResearchTool(BaseTool):
-    """Tool for research-specific tasks."""
-    
-    name = "research_tool"
-    description = "Performs research tasks with structured output"
-    
-    def can_handle(self, task):
-        """Determine if this tool can handle the task."""
-        research_keywords = [
-            "research", "investigate", "analyze", "study", "examine",
-            "explore", "review", "survey", "find information", "gather data"
-        ]
-        return any(keyword in task.lower() for keyword in research_keywords)
-        
-    def execute(self, task):
-        """Execute the research task."""
-        # In a real implementation, you might:
-        # 1. Use web search tools to gather information
-        # 2. Extract key points from search results
-        # 3. Synthesize information into a structured format
-        
-        # For this template, we'll simulate the process
-        
-        # Parse the research topic
-        topic = self._extract_topic(task)
-        
-        # Generate a structured research report
-        report = self._generate_research_report(topic, task)
-        
-        return report
-    
-    def _extract_topic(self, task):
-        """Extract the main research topic from the task."""
-        # This is a simplified implementation
-        # In a real tool, you would use NLP or the LLM to extract the topic
-        
-        task_lower = task.lower()
-        
-        # Look for common patterns
-        patterns = [
-            "research on ",
-            "research about ",
-            "information on ",
-            "information about ",
-            "investigate ",
-            "analyze "
-        ]
-        
-        for pattern in patterns:
-            if pattern in task_lower:
-                parts = task_lower.split(pattern, 1)
-                if len(parts) > 1:
-                    return parts[1].strip().split()[0].capitalize()
-        
-        # Default topic if we can't extract one
-        return "Topic"
-    
-    def _generate_research_report(self, topic, task):
-        """Generate a structured research report."""
-        # In a real implementation, this would use actual research data
-        
-        report = f"# Research Report: {topic}\n\n"
-        report += "## Summary\n\n"
-        report += f"This report provides an overview of {topic} based on the latest available information.\n\n"
-        
-        report += "## Key Findings\n\n"
-        report += "1. Finding one\n"
-        report += "2. Finding two\n"
-        report += "3. Finding three\n\n"
-        
-        report += "## Analysis\n\n"
-        report += f"The analysis of {topic} reveals several important aspects...\n\n"
-        
-        report += "## Conclusions\n\n"
-        report += "Based on the research, we can conclude that...\n\n"
-        
-        report += "## References\n\n"
-        report += "1. Reference one\n"
-        report += "2. Reference two\n"
-        
-        return report
-
+from metis_agent import SingleAgent
+from metis_agent.tools.google_search import GoogleSearchTool
+from metis_agent.tools.content_generation import ContentGenerationTool
+from metis_agent.tools.firecrawl import FirecrawlTool
 
 class ResearchAgent:
     """Specialized agent for research tasks."""
     
     def __init__(self, api_key=None, use_titans_memory=True):
         """Initialize the research agent."""
-        # Register the research tool
-        register_tool("research_tool", ResearchTool)
-        
         # Create the agent
         self.agent = SingleAgent(
             use_titans_memory=use_titans_memory,
@@ -104,12 +22,37 @@ class ResearchAgent:
             llm_model="gpt-4o"
         )
         
+        # Set API keys if provided
+        if api_key:
+            os.environ["OPENAI_API_KEY"] = api_key
+            
+        # Set up Google Search API key if available
+        google_api_key = os.environ.get("GOOGLE_API_KEY")
+        if google_api_key:
+            from metis_agent.auth.api_key_manager import APIKeyManager
+            key_manager = APIKeyManager()
+            key_manager.set_key("google_search", google_api_key)
+            
+        # Set up Firecrawl API key if available
+        firecrawl_api_key = os.environ.get("FIRECRAWL_API_KEY")
+        if firecrawl_api_key:
+            from metis_agent.auth.api_key_manager import APIKeyManager
+            key_manager = APIKeyManager()
+            key_manager.set_key("firecrawl", firecrawl_api_key)
+        
         print("Research Agent initialized")
     
     def research(self, query, session_id=None):
         """Perform research on the given query."""
-        # Process the query
-        response = self.agent.process_query(query, session_id=session_id)
+        # Format the research query
+        research_query = f"Research the following topic thoroughly: {query}"
+        
+        # Process the query, preferring the GoogleSearchTool if available
+        response = self.agent.process_query(
+            research_query, 
+            session_id=session_id,
+            tool_name="GoogleSearchTool" if "GOOGLE_API_KEY" in os.environ else None
+        )
         
         return response
     
@@ -117,6 +60,41 @@ class ResearchAgent:
         """Ask a follow-up question about previous research."""
         # Process the follow-up query
         response = self.agent.process_query(query, session_id=session_id)
+        
+        return response
+    
+    def summarize(self, url, session_id=None):
+        """Summarize content from a specific URL."""
+        # Use Firecrawl tool if available, otherwise use ContentGenerationTool
+        if "FIRECRAWL_API_KEY" in os.environ:
+            tool_name = "FirecrawlTool"
+            query = f"Summarize the content from this URL: {url}"
+        else:
+            tool_name = "ContentGenerationTool"
+            query = f"Summarize the content that might be found at this URL (without actually visiting it): {url}"
+        
+        # Process the query
+        response = self.agent.process_query(
+            query,
+            session_id=session_id,
+            tool_name=tool_name
+        )
+        
+        return response
+    
+    def generate_report(self, topic, research_data=None, session_id=None):
+        """Generate a structured research report."""
+        if research_data:
+            query = f"Generate a comprehensive research report on {topic} based on this data: {research_data}"
+        else:
+            query = f"Generate a comprehensive research report on {topic}"
+        
+        # Use ContentGenerationTool for report generation
+        response = self.agent.process_query(
+            query,
+            session_id=session_id,
+            tool_name="ContentGenerationTool"
+        )
         
         return response
 
@@ -145,6 +123,11 @@ def main():
     
     follow_up_result = agent.follow_up(follow_up_query, session_id=session_id)
     print(f"Follow-up Result:\n{follow_up_result}")
+    
+    # Generate a report
+    print("\nGenerating Research Report...")
+    report = agent.generate_report("Artificial Intelligence in Healthcare", session_id=session_id)
+    print(f"Research Report:\n{report}")
 
 if __name__ == "__main__":
     main()

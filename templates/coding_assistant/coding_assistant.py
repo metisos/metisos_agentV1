@@ -2,192 +2,17 @@
 Coding Assistant Template
 
 This template provides a specialized agent for code generation and explanation.
+It leverages the built-in tools from the Metis Agent framework.
 """
 import os
-import re
-from metis_agent import SingleAgent, BaseTool, register_tool
-
-class CodeAnalysisTool(BaseTool):
-    """Tool for analyzing code."""
-    
-    name = "code_analysis_tool"
-    description = "Analyzes code and provides insights"
-    
-    def can_handle(self, task):
-        """Determine if this tool can handle the task."""
-        analysis_keywords = [
-            "analyze code", "review code", "explain code", "understand code",
-            "code analysis", "code review", "code explanation"
-        ]
-        return any(keyword in task.lower() for keyword in analysis_keywords)
-        
-    def execute(self, task):
-        """Execute the code analysis task."""
-        # Extract code from the task
-        code = self._extract_code(task)
-        
-        if not code:
-            return "No code found to analyze. Please provide code snippets enclosed in triple backticks."
-        
-        # Analyze the code
-        analysis = self._analyze_code(code)
-        
-        return analysis
-    
-    def _extract_code(self, task):
-        """Extract code from the task."""
-        # Look for code blocks enclosed in triple backticks
-        code_blocks = re.findall(r'```(?:\w+)?\n(.*?)```', task, re.DOTALL)
-        
-        if code_blocks:
-            return code_blocks[0]
-        
-        return None
-    
-    def _analyze_code(self, code):
-        """Analyze the code and provide insights."""
-        # In a real implementation, this would use code analysis tools
-        
-        # Determine the language (simplified)
-        language = self._detect_language(code)
-        
-        analysis = f"# Code Analysis\n\n"
-        analysis += f"## Language: {language}\n\n"
-        
-        analysis += "## Structure\n\n"
-        analysis += "The code consists of the following components:\n"
-        
-        # Count lines
-        lines = code.split('\n')
-        analysis += f"- {len(lines)} lines of code\n"
-        
-        # Count functions/methods (simplified)
-        if language == "Python":
-            functions = len(re.findall(r'def\s+\w+\s*\(', code))
-            analysis += f"- {functions} functions/methods\n"
-        elif language == "JavaScript":
-            functions = len(re.findall(r'function\s+\w+\s*\(|const\s+\w+\s*=\s*\(', code))
-            analysis += f"- {functions} functions/methods\n"
-        
-        analysis += "\n## Key Observations\n\n"
-        analysis += "1. The code appears to be [purpose of the code]\n"
-        analysis += "2. It uses [key libraries/frameworks/patterns]\n"
-        analysis += "3. [Other observations]\n\n"
-        
-        analysis += "## Potential Improvements\n\n"
-        analysis += "1. [Improvement suggestion]\n"
-        analysis += "2. [Improvement suggestion]\n"
-        analysis += "3. [Improvement suggestion]\n"
-        
-        return analysis
-    
-    def _detect_language(self, code):
-        """Detect the programming language of the code."""
-        # This is a simplified implementation
-        if "def " in code and ":" in code:
-            return "Python"
-        elif "function " in code or "const " in code or "let " in code:
-            return "JavaScript"
-        elif "public class " in code or "private " in code:
-            return "Java"
-        elif "#include" in code:
-            return "C/C++"
-        else:
-            return "Unknown"
-
-
-class CodeGenerationTool(BaseTool):
-    """Tool for generating code."""
-    
-    name = "code_generation_tool"
-    description = "Generates code based on requirements"
-    
-    def can_handle(self, task):
-        """Determine if this tool can handle the task."""
-        generation_keywords = [
-            "generate code", "write code", "create code", "implement",
-            "code for", "function for", "program for"
-        ]
-        return any(keyword in task.lower() for keyword in generation_keywords)
-        
-    def execute(self, task):
-        """Execute the code generation task."""
-        # Extract requirements from the task
-        language = self._extract_language(task)
-        
-        # Generate code based on requirements
-        code = self._generate_code(task, language)
-        
-        return code
-    
-    def _extract_language(self, task):
-        """Extract the programming language from the task."""
-        # This is a simplified implementation
-        task_lower = task.lower()
-        
-        languages = {
-            "python": ["python", "py"],
-            "javascript": ["javascript", "js", "node"],
-            "java": ["java"],
-            "c++": ["c++", "cpp"],
-            "c#": ["c#", "csharp"],
-            "go": ["go", "golang"],
-            "ruby": ["ruby"],
-            "php": ["php"],
-            "swift": ["swift"],
-            "typescript": ["typescript", "ts"]
-        }
-        
-        for lang, keywords in languages.items():
-            if any(keyword in task_lower for keyword in keywords):
-                return lang
-        
-        # Default to Python if no language is specified
-        return "python"
-    
-    def _generate_code(self, task, language):
-        """Generate code based on requirements and language."""
-        # In a real implementation, this would use the LLM to generate code
-        
-        response = f"# Generated {language.capitalize()} Code\n\n"
-        response += "```" + language.lower() + "\n"
-        
-        if language.lower() == "python":
-            response += "def main():\n"
-            response += "    # TODO: Implement the functionality based on requirements\n"
-            response += "    print('Hello, world!')\n\n"
-            response += "if __name__ == '__main__':\n"
-            response += "    main()\n"
-        elif language.lower() == "javascript":
-            response += "function main() {\n"
-            response += "    // TODO: Implement the functionality based on requirements\n"
-            response += "    console.log('Hello, world!');\n"
-            response += "}\n\n"
-            response += "main();\n"
-        else:
-            response += "// Generated code for " + language + "\n"
-            response += "// TODO: Implement the functionality based on requirements\n"
-        
-        response += "```\n\n"
-        
-        response += "## Explanation\n\n"
-        response += "This code provides a basic structure for the requested functionality. Here's how it works:\n\n"
-        response += "1. [Explanation of the code structure]\n"
-        response += "2. [Explanation of key components]\n"
-        response += "3. [Explanation of how to use/extend the code]\n"
-        
-        return response
-
+from metis_agent import SingleAgent
+from metis_agent.tools.code_generation import CodeGenerationTool
 
 class CodingAssistant:
     """Specialized agent for code generation and explanation."""
     
     def __init__(self, api_key=None, use_titans_memory=True):
         """Initialize the coding assistant."""
-        # Register the coding tools
-        register_tool("code_analysis_tool", CodeAnalysisTool)
-        register_tool("code_generation_tool", CodeGenerationTool)
-        
         # Create the agent
         self.agent = SingleAgent(
             use_titans_memory=use_titans_memory,
@@ -195,36 +20,85 @@ class CodingAssistant:
             llm_model="gpt-4o"
         )
         
+        # Set API keys if provided
+        if api_key:
+            os.environ["OPENAI_API_KEY"] = api_key
+        
         print("Coding Assistant initialized")
     
-    def generate_code(self, requirements, session_id=None):
+    def generate_code(self, requirements, language=None, session_id=None):
         """Generate code based on requirements."""
-        # Process the requirements
+        # Format the code generation query
+        if language:
+            query = f"Generate {language} code for: {requirements}"
+        else:
+            query = f"Generate code for: {requirements}"
+        
+        # Process the query using the CodeGenerationTool
         response = self.agent.process_query(
-            f"Generate code for: {requirements}",
+            query,
             session_id=session_id,
-            tool_name="code_generation_tool"
+            tool_name="CodeGenerationTool"
         )
         
         return response
     
     def analyze_code(self, code, session_id=None):
         """Analyze the given code."""
-        # Process the code analysis request
+        # Format the code analysis query
+        query = f"Analyze the following code:\n\n```\n{code}\n```"
+        
+        # Process the query
         response = self.agent.process_query(
-            f"Analyze the following code:\n\n```\n{code}\n```",
-            session_id=session_id,
-            tool_name="code_analysis_tool"
+            query,
+            session_id=session_id
         )
         
         return response
     
     def explain_code(self, code, session_id=None):
         """Explain the given code."""
-        # Process the code explanation request
+        # Format the code explanation query
+        query = f"Explain the following code in simple terms:\n\n```\n{code}\n```"
+        
+        # Process the query
         response = self.agent.process_query(
-            f"Explain the following code in simple terms:\n\n```\n{code}\n```",
+            query,
             session_id=session_id
+        )
+        
+        return response
+    
+    def refactor_code(self, code, requirements=None, session_id=None):
+        """Refactor the given code."""
+        # Format the code refactoring query
+        if requirements:
+            query = f"Refactor the following code according to these requirements: {requirements}\n\n```\n{code}\n```"
+        else:
+            query = f"Refactor the following code to improve its quality:\n\n```\n{code}\n```"
+        
+        # Process the query using the CodeGenerationTool
+        response = self.agent.process_query(
+            query,
+            session_id=session_id,
+            tool_name="CodeGenerationTool"
+        )
+        
+        return response
+    
+    def debug_code(self, code, error_message=None, session_id=None):
+        """Debug the given code."""
+        # Format the debugging query
+        if error_message:
+            query = f"Debug the following code that produces this error: {error_message}\n\n```\n{code}\n```"
+        else:
+            query = f"Debug the following code and fix any issues:\n\n```\n{code}\n```"
+        
+        # Process the query using the CodeGenerationTool
+        response = self.agent.process_query(
+            query,
+            session_id=session_id,
+            tool_name="CodeGenerationTool"
         )
         
         return response
@@ -268,6 +142,11 @@ def bubble_sort(arr):
     print("\nCode Explanation Request:")
     code_explanation = assistant.explain_code(sample_code, session_id=session_id)
     print(f"Code Explanation:\n{code_explanation}")
+    
+    # Refactor code
+    print("\nCode Refactoring Request:")
+    refactored_code = assistant.refactor_code(sample_code, "Make it more efficient", session_id=session_id)
+    print(f"Refactored Code:\n{refactored_code}")
 
 if __name__ == "__main__":
     main()

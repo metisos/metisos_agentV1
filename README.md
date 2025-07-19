@@ -53,6 +53,106 @@ response = agent.process_query("Explain quantum computing in simple terms")
 print(response)
 ```
 
+## Using Pre-built Templates
+
+This starter kit includes several pre-built templates that you can use right away:
+
+### Research Agent
+
+```python
+from templates.research_agent import ResearchAgent
+
+# Create a research agent
+agent = ResearchAgent(api_key="your-api-key")
+
+# Perform research on a topic
+result = agent.research("The impact of artificial intelligence on healthcare", session_id="research_session")
+print(result)
+
+# Ask a follow-up question
+follow_up = agent.follow_up("What are the ethical concerns?", session_id="research_session")
+print(follow_up)
+```
+
+### Coding Assistant
+
+```python
+from templates.coding_assistant import CodingAssistant
+
+# Create a coding assistant
+assistant = CodingAssistant(api_key="your-api-key")
+
+# Generate code
+code = assistant.generate_code("Write a Python function to find the nth Fibonacci number")
+print(code)
+
+# Analyze code
+analysis = assistant.analyze_code("def bubble_sort(arr):\n    for i in range(len(arr)):\n        for j in range(len(arr)-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]")
+print(analysis)
+```
+
+### Content Creator
+
+```python
+from templates.content_creator import ContentCreator
+
+# Create a content creator
+creator = ContentCreator(api_key="your-api-key")
+
+# Create a blog post
+blog_post = creator.create_blog_post("Artificial Intelligence in Healthcare", tone="professional")
+print(blog_post)
+
+# Create social media content
+tweet = creator.create_social_media_post("twitter", "Artificial Intelligence in Healthcare")
+print(tweet)
+```
+
+### Customer Support Agent
+
+```python
+from templates.customer_support import CustomerSupportAgent
+
+# Create a customer support agent
+support = CustomerSupportAgent(api_key="your-api-key")
+
+# Answer an FAQ
+faq_response = support.answer_faq("What are your business hours?")
+print(faq_response)
+
+# Create a support ticket
+ticket = support.create_ticket("I'm having trouble logging into my account")
+print(ticket)
+```
+
+## Using Built-in Tools
+
+Metis Agent comes with several built-in tools that you can use:
+
+```python
+from metis_agent import SingleAgent
+from metis_agent.tools.code_generation import CodeGenerationTool
+from metis_agent.tools.content_generation import ContentGenerationTool
+from metis_agent.tools.google_search import GoogleSearchTool
+from metis_agent.tools.firecrawl import FirecrawlTool
+
+# Create an agent with specific tools
+agent = SingleAgent()
+
+# Use a specific tool for a query
+code_response = agent.process_query(
+    "Write a Python function to calculate the factorial of a number",
+    tool_name="CodeGenerationTool"
+)
+
+content_response = agent.process_query(
+    "Write a blog post about machine learning",
+    tool_name="ContentGenerationTool"
+)
+
+# Note: GoogleSearchTool and FirecrawlTool require API keys
+```
+
 ## Examples
 
 This repository contains several examples to help you get started:
