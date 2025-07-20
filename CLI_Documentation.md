@@ -1,7 +1,7 @@
 # Metis Agent CLI Documentation
 
-**Version**: 0.1.5  
-**Description**: AI Agent Framework with Multi-Phase Development Support  
+
+**Description**: AI Agent Framework for Building Intelligent Applications  
 
 ## Table of Contents
 
@@ -27,7 +27,7 @@
 ## Installation
 
 ```bash
-pip install metis-agent>=0.1.3
+pip install metis-agent
 ```
 
 ## Quick Start
