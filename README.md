@@ -193,6 +193,89 @@ Ready-to-use templates for common agent types:
 - [Content Creator](templates/content_creator/): Agent for creating various types of content
 - [Customer Support](templates/customer_support/): Agent for handling customer inquiries
 
+## Command-Line Interface (CLI)
+
+The CLI app provides a powerful command-line interface for interacting with your Metis agents. It supports both interactive and direct query modes.
+
+### Basic Usage
+
+**Direct Query Mode:**
+```bash
+python examples/cli_app.py "Your query here"
+```
+
+**Interactive Mode:**
+```bash
+python examples/cli_app.py -i
+```
+
+### CLI Options
+
+```bash
+python examples/cli_app.py [OPTIONS] [QUERY]
+
+Options:
+  -h, --help            Show help message and exit
+  -i, --interactive     Run in interactive mode
+  -s SESSION, --session SESSION
+                        Session ID for memory persistence
+  -t TOOL, --tool TOOL  Specify a tool to use
+  -p PROVIDER, --provider PROVIDER
+                        LLM provider (groq, anthropic, openai, huggingface)
+  -m MODEL, --model MODEL
+                        LLM model name
+  -k API_KEY, --api-key API_KEY
+                        API key (overrides environment variables)
+```
+
+### Examples
+
+**Research and Web Search:**
+```bash
+python examples/cli_app.py "Search for the latest developments in quantum computing"
+```
+
+**Code Generation:**
+```bash
+python examples/cli_app.py -t CodeGenerationTool "Write a Python function to sort a list using quicksort"
+```
+
+**Interactive Session with Memory:**
+```bash
+python examples/cli_app.py -i -s my_project
+[Session: my_project] > Tell me about machine learning
+[Session: my_project] > What are its main applications?
+[Session: my_project] > session new_session  # Switch sessions
+[Session: new_session] > tool GoogleSearchTool  # Use specific tool for next query
+[Session: new_session, Tool: GoogleSearchTool] > Find recent AI news
+[Session: new_session] > exit
+```
+
+**Custom LLM Configuration:**
+```bash
+# Use a different provider
+python examples/cli_app.py -p anthropic -m claude-3-sonnet "Explain quantum entanglement"
+
+# Use with custom API key
+python examples/cli_app.py -k "your-api-key" "Generate a poem about technology"
+```
+
+### Interactive Commands
+
+When running in interactive mode (`-i`), you can use special commands:
+
+- `session <session_id>`: Switch to a different session for memory isolation
+- `tool <tool_name>`: Set a specific tool to use for the next query
+- `exit` or `quit`: Exit the CLI
+
+### Features
+
+- **Memory Persistence**: Sessions maintain context across queries
+- **Tool Integration**: Access to Google Search, code generation, content creation, and more
+- **Flexible Configuration**: Support for multiple LLM providers and models
+- **Error Handling**: Graceful handling of missing API keys and network issues
+- **Professional Output**: Clean, formatted responses without distracting elements
+
 ## Building Custom Tools
 
 Metis Agent allows you to create custom tools for specialized tasks:
