@@ -4,7 +4,13 @@ Memory Usage Example
 This example demonstrates how to use different memory systems with Metis Agent.
 """
 import os
+from dotenv import load_dotenv
 from metis_agent import SingleAgent, configure_llm
+
+# Load environment variables from .env files
+load_dotenv()  # Load from .env
+load_dotenv('.env.local')  # Load from .env.local (overrides .env)
+load_dotenv('templates/.env.local')  # Load from templates/.env.local
 
 def demonstrate_basic_memory():
     """Demonstrate basic SQLite memory usage."""
@@ -131,14 +137,15 @@ def demonstrate_multiple_sessions():
 
 def main():
     """Run the memory usage examples."""
-    # Get API key from environment variable
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        print("Warning: OPENAI_API_KEY environment variable not set.")
+    # Get Groq API key from environment variable
+    groq_api_key = os.environ.get("GROQ_API_KEY")
+    if not groq_api_key:
+        print("Warning: GROQ_API_KEY environment variable not set.")
         print("Using mock mode for demonstration purposes.")
+        return
     
-    # Configure LLM
-    configure_llm("openai", "gpt-4o", api_key)
+    # Configure LLM to use Groq
+    configure_llm("groq", "llama-3.1-8b-instant", groq_api_key)
     
     # Run the examples
     demonstrate_basic_memory()

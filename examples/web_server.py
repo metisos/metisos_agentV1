@@ -4,8 +4,14 @@ Web Server Example
 This example demonstrates how to set up a web API for your Metis Agent.
 """
 import os
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from metis_agent import SingleAgent, configure_llm
+
+# Load environment variables from .env files
+load_dotenv()  # Load from .env
+load_dotenv('.env.local')  # Load from .env.local (overrides .env)
+load_dotenv('templates/.env.local')  # Load from templates/.env.local
 
 # Create Flask app
 app = Flask(__name__)
@@ -17,11 +23,14 @@ def initialize_agent():
     """Initialize the agent with configuration."""
     global agent
     
-    # Get API key from environment variable
-    api_key = os.environ.get("OPENAI_API_KEY")
+    # Get Groq API key from environment variable
+    groq_api_key = os.environ.get("GROQ_API_KEY")
     
-    # Configure LLM
-    configure_llm("openai", "gpt-4o", api_key)
+    if not groq_api_key:
+        raise ValueError("GROQ_API_KEY environment variable not set")
+    
+    # Configure LLM to use Groq
+    configure_llm("groq", "llama-3.1-8b-instant", groq_api_key)
     
     # Create agent with Titans memory
     agent = SingleAgent(use_titans_memory=True)

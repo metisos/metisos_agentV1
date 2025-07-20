@@ -4,18 +4,40 @@ Simple Agent Example
 This example demonstrates how to create and use a basic Metis Agent.
 """
 import os
-from metis_agent import SingleAgent, configure_llm
+from dotenv import load_dotenv
+from metis_agent import SingleAgent, configure_llm, APIKeyManager
+
+# Load environment variables from .env files
+load_dotenv()  # Load from .env
+load_dotenv('.env.local')  # Load from .env.local (overrides .env)
+load_dotenv('templates/.env.local')  # Load from templates/.env.local
 
 def main():
     """Run a simple agent example."""
-    # Get API key from environment variable
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        print("Warning: OPENAI_API_KEY environment variable not set.")
-        print("Using mock mode for demonstration purposes.")
+    print("=== API Key Setup ===")
     
-    # Configure LLM (optional, will use default OpenAI if not specified)
-    configure_llm("openai", "gpt-4o", api_key)
+    # Option 1: Use APIKeyManager to get API keys
+    key_manager = APIKeyManager()
+    groq_api_key = key_manager.get_key("groq")  # Checks env vars first, then secure storage
+    
+    # Option 2: Or get directly from environment (for comparison)
+    env_key = os.environ.get("GROQ_API_KEY")
+    
+    if groq_api_key:
+        if env_key:
+            print("+ GROQ_API_KEY found in environment variables")
+        else:
+            print("+ GROQ_API_KEY found in secure storage")
+        # Configure LLM to use Groq
+        configure_llm("groq", "llama-3.1-8b-instant", groq_api_key)
+    else:
+        print("- GROQ_API_KEY not found in environment or secure storage")
+        print("- Using mock mode for demonstration purposes")
+        print("\nTip: Set up API keys using:")
+        print("  1. Environment variables: GROQ_API_KEY=your-key")
+        print("  2. APIKeyManager: key_manager.set_key('groq', 'your-key')")
+        print("  3. See examples/api_key_management.py for full demo")
+
     
     # Create an agent
     agent = SingleAgent()

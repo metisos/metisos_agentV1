@@ -28,7 +28,7 @@ setup(
     ],
     python_requires=">=3.8",
     install_requires=[
-        "metis-agent>=0.1.0",
+        "metis-agent>=0.1.3",
         "flask>=2.0.0",
         "python-dotenv>=0.15.0",
         "requests>=2.25.0",

@@ -11,7 +11,7 @@ A starter kit for building intelligent AI agents with the Metis Agent framework.
 Metis Agent is a powerful, modular framework for building AI agents with minimal boilerplate code. It provides:
 
 - **Modular Architecture**: Clean separation of concerns with specialized components
-- **Multiple LLM Providers**: Seamless integration with OpenAI, Groq, Anthropic, and HuggingFace
+- **Multiple LLM Providers**: Seamless integration with Groq, Anthropic, HuggingFace, and OpenAI
 - **Advanced Memory Systems**: Both simple and adaptive memory options
 - **Specialized Tools**: Ready-to-use tools for common tasks
 - **Task Planning and Execution**: Break down complex tasks into manageable subtasks
@@ -37,18 +37,39 @@ response = agent.process_query("Write a Python function to calculate Fibonacci n
 print(response)
 ```
 
+### Environment Setup
+
+1. Copy the environment template:
+```bash
+cp .env.example .env
+```
+
+2. Add your API keys to `.env`:
+```bash
+# Primary LLM Provider (Groq is recommended)
+GROQ_API_KEY=your_groq_api_key_here
+
+# Optional: Other LLM providers
+OPENAI_API_KEY=your_openai_api_key
+ANTHROPIC_API_KEY=your_anthropic_api_key
+
+# Optional: Additional tool API keys
+GOOGLE_API_KEY=your_google_api_key
+FIRECRAWL_API_KEY=your_firecrawl_api_key
+```
+
 ### Using Different LLM Providers
 
 ```python
-from metis_agent import SingleAgent, configure_llm
+from metis_agent import SingleAgent
 
-# Configure LLM (OpenAI, Groq, Anthropic, or HuggingFace)
-configure_llm("groq", "llama-3.1-8b-instant", "your-api-key")
-
-# Create an agent
+# Agent will auto-detect available LLM providers from environment
 agent = SingleAgent()
 
-# Process a query
+# Or explicitly specify a provider
+agent = SingleAgent(llm_provider="groq")
+
+# Process queries
 response = agent.process_query("Explain quantum computing in simple terms")
 print(response)
 ```

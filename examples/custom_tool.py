@@ -6,7 +6,13 @@ This example demonstrates how to create and use custom tools with Metis Agent.
 import os
 import json
 import requests
-from metis_agent import SingleAgent, BaseTool, register_tool
+from dotenv import load_dotenv
+from metis_agent import SingleAgent, BaseTool, register_tool, configure_llm
+
+# Load environment variables from .env files
+load_dotenv()  # Load from .env
+load_dotenv('.env.local')  # Load from .env.local (overrides .env)
+load_dotenv('templates/.env.local')  # Load from templates/.env.local
 
 class WeatherTool(BaseTool):
     """Custom tool for getting weather information."""
@@ -151,6 +157,16 @@ class StockPriceTool(BaseTool):
 
 def main():
     """Run the custom tool example."""
+    # Get Groq API key from environment variable
+    groq_api_key = os.environ.get("GROQ_API_KEY")
+    if not groq_api_key:
+        print("Warning: GROQ_API_KEY environment variable not set.")
+        print("Using mock mode for demonstration purposes.")
+        return
+    
+    # Configure LLM to use Groq
+    configure_llm("groq", "llama-3.1-8b-instant", groq_api_key)
+    
     # Register our custom tools
     register_tool("weather_tool", WeatherTool)
     register_tool("stock_price_tool", StockPriceTool)

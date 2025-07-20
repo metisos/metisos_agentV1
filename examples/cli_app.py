@@ -6,7 +6,13 @@ This example demonstrates how to build a command-line interface for your Metis A
 import os
 import sys
 import argparse
+from dotenv import load_dotenv
 from metis_agent import SingleAgent, configure_llm
+
+# Load environment variables from .env files
+load_dotenv()  # Load from .env
+load_dotenv('.env.local')  # Load from .env.local (overrides .env)
+load_dotenv('templates/.env.local')  # Load from templates/.env.local
 
 class MetisAgentCLI:
     """Command-line interface for Metis Agent."""
@@ -15,9 +21,9 @@ class MetisAgentCLI:
         """Initialize the CLI."""
         self.agent = None
         self.session_id = None
-        self.api_key = os.environ.get("OPENAI_API_KEY")
-        self.llm_provider = "openai"
-        self.llm_model = "gpt-4o"
+        self.api_key = os.environ.get("GROQ_API_KEY")
+        self.llm_provider = "groq"
+        self.llm_model = "llama-3.1-8b-instant"
         
     def initialize_agent(self):
         """Initialize the agent with configuration."""

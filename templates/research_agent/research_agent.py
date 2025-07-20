@@ -13,19 +13,14 @@ from metis_agent.tools.firecrawl import FirecrawlTool
 class ResearchAgent:
     """Specialized agent for research tasks."""
     
-    def __init__(self, api_key=None, use_titans_memory=True):
+    def __init__(self, llm_provider=None, use_titans_memory=True):
         """Initialize the research agent."""
-        # Create the agent
+        # Create the agent - will auto-detect LLM provider from environment
         self.agent = SingleAgent(
             use_titans_memory=use_titans_memory,
-            llm_provider="openai",
-            llm_model="gpt-4o"
+            llm_provider=llm_provider  # Optional: specify provider, otherwise auto-detects
         )
         
-        # Set API keys if provided
-        if api_key:
-            os.environ["OPENAI_API_KEY"] = api_key
-            
         # Set up Google Search API key if available
         google_api_key = os.environ.get("GOOGLE_API_KEY")
         if google_api_key:
@@ -101,11 +96,8 @@ class ResearchAgent:
 
 def main():
     """Run a demonstration of the research agent."""
-    # Get API key from environment variable
-    api_key = os.environ.get("OPENAI_API_KEY")
-    
-    # Create the research agent
-    agent = ResearchAgent(api_key=api_key)
+    # Create the research agent (will auto-detect LLM provider from environment)
+    agent = ResearchAgent()
     
     # Define a session ID
     session_id = "research_session"

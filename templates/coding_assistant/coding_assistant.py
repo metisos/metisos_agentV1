@@ -5,8 +5,7 @@ This template provides a specialized agent for code generation and explanation.
 It leverages the built-in tools from the Metis Agent framework.
 """
 import os
-from metis_agent import SingleAgent
-from metis_agent.tools.code_generation import CodeGenerationTool
+from metis_agent import SingleAgent, get_tool, configure_llm
 
 class CodingAssistant:
     """Specialized agent for code generation and explanation."""
