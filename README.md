@@ -195,69 +195,102 @@ Ready-to-use templates for common agent types:
 
 ## Command-Line Interface (CLI)
 
-The CLI app provides a powerful command-line interface for interacting with your Metis agents. It supports both interactive and direct query modes.
+Metis Agent includes a built-in command-line interface that's available immediately after installation. No need to download this repository!
+
+### Installation and Quick Start
+
+```bash
+# Install the package
+pip install metis-agent
+
+# Run a quick query
+metis run "What is artificial intelligence?"
+
+# Start interactive mode
+metis run -i
+```
 
 ### Basic Usage
 
 **Direct Query Mode:**
 ```bash
-python examples/cli_app.py "Your query here"
+metis run "Your query here"
 ```
 
 **Interactive Mode:**
 ```bash
-python examples/cli_app.py -i
+metis run -i
+# or without any query:
+metis run
 ```
 
-### CLI Options
+### CLI Commands
 
+#### Main Commands
 ```bash
-python examples/cli_app.py [OPTIONS] [QUERY]
+metis run [QUERY]         # Run a query or start interactive mode
+metis serve              # Start web server
+metis tools list         # List available tools
+metis auth set-key       # Set API keys
+metis memory stats       # View memory statistics
+```
+
+#### Options for `metis run`
+```bash
+metis run [OPTIONS] [QUERY]
 
 Options:
-  -h, --help            Show help message and exit
-  -i, --interactive     Run in interactive mode
-  -s SESSION, --session SESSION
-                        Session ID for memory persistence
-  -t TOOL, --tool TOOL  Specify a tool to use
-  -p PROVIDER, --provider PROVIDER
-                        LLM provider (groq, anthropic, openai, huggingface)
-  -m MODEL, --model MODEL
-                        LLM model name
-  -k API_KEY, --api-key API_KEY
-                        API key (overrides environment variables)
+  -i, --interactive     Start interactive mode
+  --tool TEXT          Specify a tool to use
+  --session-id TEXT    Session ID for context
+  --memory             Enable Titans memory
+  --llm TEXT           LLM provider to use (default: groq)
+  --model TEXT         LLM model to use
+  --help               Show help message
 ```
 
 ### Examples
 
 **Research and Web Search:**
 ```bash
-python examples/cli_app.py "Search for the latest developments in quantum computing"
+metis run "Search for the latest developments in quantum computing"
 ```
 
-**Code Generation:**
+**Code Generation with Specific Tool:**
 ```bash
-python examples/cli_app.py -t CodeGenerationTool "Write a Python function to sort a list using quicksort"
+metis run --tool CodeGenerationTool "Write a Python function to sort a list using quicksort"
 ```
 
 **Interactive Session with Memory:**
 ```bash
-python examples/cli_app.py -i -s my_project
-[Session: my_project] > Tell me about machine learning
-[Session: my_project] > What are its main applications?
-[Session: my_project] > session new_session  # Switch sessions
-[Session: new_session] > tool GoogleSearchTool  # Use specific tool for next query
-[Session: new_session, Tool: GoogleSearchTool] > Find recent AI news
-[Session: new_session] > exit
+metis run -i --memory --session-id my_project
+[my_project] > Tell me about machine learning
+[my_project] > What are its main applications?
+[my_project] > session new_session  # Switch sessions
+[new_session] > tools  # List available tools
+[new_session] > exit
 ```
 
 **Custom LLM Configuration:**
 ```bash
 # Use a different provider
-python examples/cli_app.py -p anthropic -m claude-3-sonnet "Explain quantum entanglement"
+metis run --llm anthropic --model claude-3-sonnet "Explain quantum entanglement"
 
-# Use with custom API key
-python examples/cli_app.py -k "your-api-key" "Generate a poem about technology"
+# Use OpenAI
+metis run --llm openai "Generate a poem about technology"
+```
+
+**API Key Management:**
+```bash
+# Set API keys
+metis auth set-key groq your-groq-api-key
+metis auth set-key google your-google-api-key
+
+# List configured keys
+metis auth list-keys
+
+# Remove a key
+metis auth remove-key groq
 ```
 
 ### Interactive Commands
