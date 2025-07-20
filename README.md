@@ -197,6 +197,8 @@ Ready-to-use templates for common agent types:
 
 Metis Agent includes a built-in command-line interface that's available immediately after installation. No need to download this repository!
 
+**[Complete CLI Documentation](CLI_Documentation.md)** - Comprehensive guide covering all 13 command groups, examples, and best practices.
+
 ### Installation and Quick Start
 
 ```bash
