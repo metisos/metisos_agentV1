@@ -1,4 +1,29 @@
-metis-agent>=0.1.3
-flask>=2.0.0
-python-dotenv>=0.15.0
-requests>=2.25.0
+# Metis Agent Starter Templates Requirements
+
+# Core framework
+metis-agent
+
+# Web framework (for web_app_template.py)
+flask
+flask-cors
+
+# HTTP requests (for API integration tools)
+requests>=2.31.0
+
+# Data processing (for data analysis examples)
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Database support (for database tools)
+sqlite3  # Built into Python
+
+# Development and testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Optional: Enhanced features
+psutil>=5.9.0  # For performance monitoring
+python-dotenv>=1.0.0  # For environment variable management
+
+# Documentation
+markdown>=3.4.0

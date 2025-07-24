@@ -1,20 +1,41 @@
-# Metis Agent Starter Kit
+# Metis Agent
 
-![Metis Agent](https://img.shields.io/badge/Metis-Agent-blue)
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![License](https://img.shields.io/badge/License-Apache%202.0-blue)
+[![PyPI version](https://badge.fury.io/py/metis-agent.svg)](https://badge.fury.io/py/metis-agent)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue)](https://opensource.org/licenses/Apache-2.0)
+[![Downloads](https://pepy.tech/badge/metis-agent)](https://pepy.tech/project/metis-agent)
 
-A starter kit for building intelligent AI agents with the Metis Agent framework. This repository provides examples, templates, and best practices to help you get started quickly.
+A powerful, modular framework for building AI agents with minimal boilerplate code. Metis Agent provides a comprehensive toolkit for creating intelligent agents that can understand user queries, plan and execute complex tasks, and leverage specialized tools.
 
-## What is Metis Agent?
+**Latest Release: v0.2.2** - Enhanced custom tools system, comprehensive templates, MCP tool architecture, and production-ready features.
 
-Metis Agent is a powerful, modular framework for building AI agents with minimal boilerplate code. It provides:
+### What's New in v0.2.2
+- **Enhanced Custom Tools System** - Complete framework for custom tool development
+- **Comprehensive Templates** - 6 production-ready templates for different use cases
+- **MCP Tool Architecture** - Enhanced tool system with performance monitoring
+- **Smart Orchestrator** - Advanced task tracking and planning capabilities
+- **Security Improvements** - Enhanced credential management and validation
+- **Windows Compatibility** - Full support for Windows development environments
+
+## Features
 
 - **Modular Architecture**: Clean separation of concerns with specialized components
-- **Multiple LLM Providers**: Seamless integration with Groq, Anthropic, HuggingFace, and OpenAI
-- **Advanced Memory Systems**: Both simple and adaptive memory options
-- **Specialized Tools**: Ready-to-use tools for common tasks
+- **Multiple LLM Providers**: Seamless integration with OpenAI, Groq, Anthropic, and HuggingFace
+- **Secure API Key Management**: Safely store and retrieve API keys
+- **Advanced Memory Systems**: 
+  - SQLite-based persistent memory
+  - Titans-inspired adaptive memory with context-aware retrieval
+- **Specialized Tools**: Ready-to-use tools for common tasks:
+  - Code generation
+  - Content creation
+  - Web search
+  - Web scraping (Firecrawl integration)
 - **Task Planning and Execution**: Break down complex tasks into manageable subtasks
+- **Intent Classification**: Automatically determine if a query is a question or task
+- **Multiple Interfaces**: 
+  - Python API for direct integration
+  - Command-line interface for quick access
+  - Web server for API-based interaction
 
 ## Installation
 
@@ -22,9 +43,38 @@ Metis Agent is a powerful, modular framework for building AI agents with minimal
 pip install metis-agent
 ```
 
+## Starter Templates
+
+Get started quickly with our comprehensive collection of templates and examples:
+
+**[Metis Agent Starter Templates](https://github.com/metis-analytics/metis-starter)** - A complete collection of templates for different use cases:
+
+- **Basic Agent Template** - Simple agent for beginners and quick prototypes
+- **Custom Agent Template** - Specialized agents with custom personalities
+- **Web App Template** - Flask-based web chat interface
+- **Advanced Integration Template** - Enterprise multi-agent systems
+- **Custom Tools Template** - Examples for extending agent capabilities
+- **Simple Custom Tool Example** - Step-by-step tool development guide
+
+```bash
+# Clone the starter templates
+git clone https://github.com/metis-analytics/metis-starter.git
+cd metis-starter
+
+# Run your first agent
+python templates/basic_agent_template.py
+```
+
+Each template includes:
+- Complete working examples
+- Detailed documentation
+- Setup instructions
+- Customization guides
+- Best practices
+
 ## Quick Start
 
-### Basic Agent
+### Basic Usage
 
 ```python
 from metis_agent import SingleAgent
@@ -37,284 +87,26 @@ response = agent.process_query("Write a Python function to calculate Fibonacci n
 print(response)
 ```
 
-### Environment Setup
-
-1. Copy the environment template:
-```bash
-cp .env.example .env
-```
-
-2. Add your API keys to `.env`:
-```bash
-# Primary LLM Provider (Groq is recommended)
-GROQ_API_KEY=your_groq_api_key_here
-
-# Optional: Other LLM providers
-OPENAI_API_KEY=your_openai_api_key
-ANTHROPIC_API_KEY=your_anthropic_api_key
-
-# Optional: Additional tool API keys
-GOOGLE_API_KEY=your_google_api_key
-FIRECRAWL_API_KEY=your_firecrawl_api_key
-```
-
 ### Using Different LLM Providers
 
 ```python
-from metis_agent import SingleAgent
+from metis_agent import SingleAgent, configure_llm
 
-# Agent will auto-detect available LLM providers from environment
+# Configure LLM (OpenAI, Groq, Anthropic, or HuggingFace)
+configure_llm("groq", "llama-3.1-8b-instant", "your-api-key")
+
+# Create an agent
 agent = SingleAgent()
 
-# Or explicitly specify a provider
-agent = SingleAgent(llm_provider="groq")
-
-# Process queries
+# Process a query
 response = agent.process_query("Explain quantum computing in simple terms")
 print(response)
 ```
 
-## Using Pre-built Templates
-
-This starter kit includes several pre-built templates that you can use right away:
-
-### Research Agent
+### Creating Custom Tools
 
 ```python
-from templates.research_agent import ResearchAgent
-
-# Create a research agent
-agent = ResearchAgent(api_key="your-api-key")
-
-# Perform research on a topic
-result = agent.research("The impact of artificial intelligence on healthcare", session_id="research_session")
-print(result)
-
-# Ask a follow-up question
-follow_up = agent.follow_up("What are the ethical concerns?", session_id="research_session")
-print(follow_up)
-```
-
-### Coding Assistant
-
-```python
-from templates.coding_assistant import CodingAssistant
-
-# Create a coding assistant
-assistant = CodingAssistant(api_key="your-api-key")
-
-# Generate code
-code = assistant.generate_code("Write a Python function to find the nth Fibonacci number")
-print(code)
-
-# Analyze code
-analysis = assistant.analyze_code("def bubble_sort(arr):\n    for i in range(len(arr)):\n        for j in range(len(arr)-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]")
-print(analysis)
-```
-
-### Content Creator
-
-```python
-from templates.content_creator import ContentCreator
-
-# Create a content creator
-creator = ContentCreator(api_key="your-api-key")
-
-# Create a blog post
-blog_post = creator.create_blog_post("Artificial Intelligence in Healthcare", tone="professional")
-print(blog_post)
-
-# Create social media content
-tweet = creator.create_social_media_post("twitter", "Artificial Intelligence in Healthcare")
-print(tweet)
-```
-
-### Customer Support Agent
-
-```python
-from templates.customer_support import CustomerSupportAgent
-
-# Create a customer support agent
-support = CustomerSupportAgent(api_key="your-api-key")
-
-# Answer an FAQ
-faq_response = support.answer_faq("What are your business hours?")
-print(faq_response)
-
-# Create a support ticket
-ticket = support.create_ticket("I'm having trouble logging into my account")
-print(ticket)
-```
-
-## Using Built-in Tools
-
-Metis Agent comes with several built-in tools that you can use:
-
-```python
-from metis_agent import SingleAgent
-from metis_agent.tools.code_generation import CodeGenerationTool
-from metis_agent.tools.content_generation import ContentGenerationTool
-from metis_agent.tools.google_search import GoogleSearchTool
-from metis_agent.tools.firecrawl import FirecrawlTool
-
-# Create an agent with specific tools
-agent = SingleAgent()
-
-# Use a specific tool for a query
-code_response = agent.process_query(
-    "Write a Python function to calculate the factorial of a number",
-    tool_name="CodeGenerationTool"
-)
-
-content_response = agent.process_query(
-    "Write a blog post about machine learning",
-    tool_name="ContentGenerationTool"
-)
-
-# Note: GoogleSearchTool and FirecrawlTool require API keys
-```
-
-## Examples
-
-This repository contains several examples to help you get started:
-
-- [Simple Agent](examples/simple_agent.py): Basic agent setup and usage
-- [Custom Tool](examples/custom_tool.py): Creating and using custom tools
-- [Memory Usage](examples/memory_usage.py): Working with different memory systems
-- [Web Server](examples/web_server.py): Setting up a web API for your agent
-- [CLI Application](examples/cli_app.py): Building a command-line interface
-
-## Templates
-
-Ready-to-use templates for common agent types:
-
-- [Research Agent](templates/research_agent/): Agent specialized for research tasks
-- [Coding Assistant](templates/coding_assistant/): Agent for code generation and explanation
-- [Content Creator](templates/content_creator/): Agent for creating various types of content
-- [Customer Support](templates/customer_support/): Agent for handling customer inquiries
-
-## Command-Line Interface (CLI)
-
-Metis Agent includes a built-in command-line interface that's available immediately after installation. No need to download this repository!
-
-### Installation and Quick Start
-
-```bash
-# Install the package
-pip install metis-agent
-
-# Run a quick query
-metis run "What is artificial intelligence?"
-
-# Start interactive mode
-metis run -i
-```
-
-### Basic Usage
-
-**Direct Query Mode:**
-```bash
-metis run "Your query here"
-```
-
-**Interactive Mode:**
-```bash
-metis run -i
-# or without any query:
-metis run
-```
-
-### CLI Commands
-
-#### Main Commands
-```bash
-metis run [QUERY]         # Run a query or start interactive mode
-metis serve              # Start web server
-metis tools list         # List available tools
-metis auth set-key       # Set API keys
-metis memory stats       # View memory statistics
-```
-
-#### Options for `metis run`
-```bash
-metis run [OPTIONS] [QUERY]
-
-Options:
-  -i, --interactive     Start interactive mode
-  --tool TEXT          Specify a tool to use
-  --session-id TEXT    Session ID for context
-  --memory             Enable Titans memory
-  --llm TEXT           LLM provider to use (default: groq)
-  --model TEXT         LLM model to use
-  --help               Show help message
-```
-
-### Examples
-
-**Research and Web Search:**
-```bash
-metis run "Search for the latest developments in quantum computing"
-```
-
-**Code Generation with Specific Tool:**
-```bash
-metis run --tool CodeGenerationTool "Write a Python function to sort a list using quicksort"
-```
-
-**Interactive Session with Memory:**
-```bash
-metis run -i --memory --session-id my_project
-[my_project] > Tell me about machine learning
-[my_project] > What are its main applications?
-[my_project] > session new_session  # Switch sessions
-[new_session] > tools  # List available tools
-[new_session] > exit
-```
-
-**Custom LLM Configuration:**
-```bash
-# Use a different provider
-metis run --llm anthropic --model claude-3-sonnet "Explain quantum entanglement"
-
-# Use OpenAI
-metis run --llm openai "Generate a poem about technology"
-```
-
-**API Key Management:**
-```bash
-# Set API keys
-metis auth set-key groq your-groq-api-key
-metis auth set-key google your-google-api-key
-
-# List configured keys
-metis auth list-keys
-
-# Remove a key
-metis auth remove-key groq
-```
-
-### Interactive Commands
-
-When running in interactive mode (`-i`), you can use special commands:
-
-- `session <session_id>`: Switch to a different session for memory isolation
-- `tool <tool_name>`: Set a specific tool to use for the next query
-- `exit` or `quit`: Exit the CLI
-
-### Features
-
-- **Memory Persistence**: Sessions maintain context across queries
-- **Tool Integration**: Access to Google Search, code generation, content creation, and more
-- **Flexible Configuration**: Support for multiple LLM providers and models
-- **Error Handling**: Graceful handling of missing API keys and network issues
-- **Professional Output**: Clean, formatted responses without distracting elements
-
-## Building Custom Tools
-
-Metis Agent allows you to create custom tools for specialized tasks:
-
-```python
-from metis_agent import BaseTool, register_tool
+from metis_agent import SingleAgent, BaseTool, register_tool
 
 class MyCustomTool(BaseTool):
     name = "custom_tool"
@@ -328,17 +120,21 @@ class MyCustomTool(BaseTool):
 
 # Register the tool
 register_tool("custom_tool", MyCustomTool)
-```
 
-## Working with Memory
-
-Metis Agent provides different memory systems:
-
-```python
-# Using SQLite memory
+# Create an agent
 agent = SingleAgent()
 
-# Using Titans-inspired adaptive memory
+# Process a query
+response = agent.process_query("Perform a custom task")
+print(response)
+```
+
+### Using Titans Memory
+
+```python
+from metis_agent import SingleAgent
+
+# Create an agent with Titans memory
 agent = SingleAgent(use_titans_memory=True)
 
 # Process queries with memory
@@ -346,20 +142,379 @@ result1 = agent.process_query("What is machine learning?", session_id="user123")
 result2 = agent.process_query("How does it relate to AI?", session_id="user123")
 ```
 
-## Deployment Options
+## Command Line Interface
 
-- **Local Development**: Run agents locally for development and testing
-- **Web API**: Deploy as a web service using the built-in Flask server
-- **CLI Application**: Build command-line tools with the Metis CLI framework
-- **Integration**: Embed agents in existing applications
+Metis Agent provides a comprehensive command-line interface for all operations:
 
-## Best Practices
+### Core Commands
 
-- **API Key Management**: Use environment variables or the secure storage system
-- **Error Handling**: Implement proper error handling for LLM calls and tool execution
-- **Testing**: Write tests for your agents and tools
-- **Monitoring**: Log agent activities and performance metrics
-- **Scaling**: Consider using async patterns for handling multiple requests
+```bash
+# Interactive chat mode
+metis chat
+
+# Run a single query
+metis run "Write a Python function to calculate Fibonacci numbers"
+
+# Run with specific LLM provider
+metis run "Explain quantum computing" --llm groq --model llama-3.1-8b-instant
+
+# Run with memory enabled
+metis run "What did we discuss earlier?" --memory --session-id user123
+```
+
+### Agent Management
+
+```bash
+# Create a new agent configuration
+metis agent create --name "CodeExpert" --personality "Expert programming assistant"
+
+# List all configured agents
+metis agent list
+
+# Use a specific agent
+metis run "Help me debug this code" --agent CodeExpert
+
+# Delete an agent
+metis agent delete CodeExpert
+```
+
+### API Key Management
+
+```bash
+# Set API keys for different providers
+metis auth set-key openai sk-your-openai-key
+metis auth set-key groq gsk_your-groq-key
+metis auth set-key anthropic your-anthropic-key
+
+# List configured API keys (shows providers only, not keys)
+metis auth list-keys
+
+# Remove an API key
+metis auth remove-key openai
+
+# Test API key connectivity
+metis auth test openai
+```
+
+### Tool Management
+
+```bash
+# List all available tools
+metis tools list
+
+# Get detailed information about a tool
+metis tools info CodeGenerationTool
+
+# Test a specific tool
+metis tools test CodeGenerationTool "Write a hello world function"
+
+# Enable/disable tools
+metis tools enable GoogleSearchTool
+metis tools disable FirecrawlTool
+```
+
+### Memory Operations
+
+```bash
+# Show memory statistics
+metis memory stats
+
+# Clear memory for a session
+metis memory clear --session-id user123
+
+# Export memory to file
+metis memory export --output memory_backup.json
+
+# Import memory from file
+metis memory import --input memory_backup.json
+
+# Search memory contents
+metis memory search "machine learning"
+```
+
+### Web Server
+
+```bash
+# Start web server with default settings
+metis serve
+
+# Start with custom port and memory enabled
+metis serve --port 8080 --memory --cors
+
+# Start with specific agent
+metis serve --agent CodeExpert --port 5000
+
+# Start with authentication
+metis serve --auth --api-key your-server-api-key
+```
+
+### Configuration
+
+```bash
+# Configure default LLM provider
+metis config set-llm --provider groq --model llama-3.1-8b-instant
+
+# Set default memory settings
+metis config set-memory --type titans --path ./memory
+
+# View current configuration
+metis config show
+
+# Reset configuration to defaults
+metis config reset
+```
+
+### Project Management
+
+```bash
+# Initialize a new Metis Agent project
+metis project init my-agent-project
+
+# Generate project scaffolding
+metis project scaffold --template basic
+
+# Validate project structure
+metis project validate
+
+# Build and package project
+metis project build
+```
+
+### Development Tools
+
+```bash
+# Run system diagnostics
+metis dev diagnose
+
+# Test all components
+metis dev test
+
+# Generate development templates
+metis dev template --type custom-tool --name MyTool
+
+# Profile agent performance
+metis dev profile "Complex query for performance testing"
+```
+
+## Web Server
+
+Metis Agent includes a web server for API access:
+
+```bash
+# Start the web server
+metis serve
+```
+
+Then make requests to the API:
+
+```bash
+curl -X POST http://localhost:5000/api/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Write a Python function to calculate Fibonacci numbers"}'
+```
+
+API Endpoints:
+
+- `GET /` - Server status
+- `POST /api/query` - Process a query
+- `GET /api/agent-identity` - Get agent information
+- `GET /api/memory-insights` - Get memory statistics
+- `GET /api/tools` - List available tools
+
+## Detailed Documentation
+
+### Core Components
+
+#### SingleAgent
+
+The main agent class that orchestrates all components:
+
+```python
+from metis_agent import SingleAgent
+
+agent = SingleAgent(
+    use_titans_memory=False,  # Enable/disable Titans memory
+    tools=None,               # Custom tools (uses all available if None)
+    llm_provider="openai",    # LLM provider
+    llm_model=None,           # LLM model (uses default if None)
+    memory_path=None,         # Path to memory database
+    task_file=None            # Path to task file
+)
+```
+
+#### Intent Router
+
+Determines whether a user query is a question or a task:
+
+```python
+from metis_agent.core.intent_router import IntentRouter
+
+router = IntentRouter()
+intent = router.classify("What is the capital of France?")  # Returns "question"
+intent = router.classify("Create a Python script to sort a list")  # Returns "task"
+```
+
+#### Task Manager
+
+Manages tasks and their status:
+
+```python
+from metis_agent.core.task_manager import TaskManager
+
+task_manager = TaskManager()
+task_manager.add_task("Write a function to calculate Fibonacci numbers")
+task_manager.mark_complete("Write a function to calculate Fibonacci numbers")
+tasks = task_manager.get_all_tasks()
+```
+
+#### Memory Systems
+
+SQLite-based memory:
+
+```python
+from metis_agent.memory.sqlite_store import SQLiteMemory
+
+memory = SQLiteMemory("memory.db")
+memory.store_input("user123", "What is machine learning?")
+memory.store_output("user123", "Machine learning is...")
+context = memory.get_context("user123")
+```
+
+Titans-inspired adaptive memory:
+
+```python
+from metis_agent.memory.titans.titans_memory import TitansInspiredMemory
+
+memory = TitansInspiredMemory("memory_dir")
+memory.store_memory("Machine learning is...", "ai_concepts")
+relevant_memories = memory.retrieve_relevant_memories("What is deep learning?")
+```
+
+### LLM Providers
+
+Configure and use different LLM providers:
+
+```python
+from metis_agent.core.llm_interface import configure_llm, get_llm
+
+# Configure LLM
+configure_llm("openai", "gpt-4o")  # OpenAI
+configure_llm("groq", "llama-3.1-8b-instant")  # Groq
+configure_llm("anthropic", "claude-3-opus-20240229")  # Anthropic
+configure_llm("huggingface", "mistralai/Mixtral-8x7B-Instruct-v0.1")  # HuggingFace
+
+# Get configured LLM
+llm = get_llm()
+response = llm.chat([{"role": "user", "content": "Hello!"}])
+```
+
+### Tools
+
+Available tools:
+
+- `CodeGenerationTool`: Generates code based on requirements
+- `ContentGenerationTool`: Creates various types of content
+- `GoogleSearchTool`: Performs web searches
+- `FirecrawlTool`: Scrapes and analyzes web content
+
+Creating custom tools:
+
+```python
+from metis_agent.tools.base import BaseTool
+from metis_agent.tools.registry import register_tool
+
+class MyTool(BaseTool):
+    name = "my_tool"
+    description = "Custom tool for specific tasks"
+    
+    def can_handle(self, task):
+        # Determine if this tool can handle the task
+        return "specific task" in task.lower()
+        
+    def execute(self, task):
+        # Execute the task
+        return f"Task executed: {task}"
+
+# Register the tool
+register_tool("my_tool", MyTool)
+```
+
+### API Key Management
+
+Secure storage and retrieval of API keys:
+
+```python
+from metis_agent.auth.api_key_manager import APIKeyManager
+
+key_manager = APIKeyManager()
+key_manager.set_key("openai", "your-api-key")
+api_key = key_manager.get_key("openai")
+services = key_manager.list_services()
+```
+
+## Testing
+
+Run the comprehensive test suite:
+
+```bash
+# Run system tests
+python metis_agent/test_system.py
+
+# Run CLI tests
+python metis_agent/test_cli.py
+```
+
+## Advanced Usage
+
+### Session Management
+
+Maintain context across multiple interactions:
+
+```python
+agent = SingleAgent()
+
+# First query
+response1 = agent.process_query(
+    "What are the main types of machine learning?",
+    session_id="user123"
+)
+
+# Follow-up query (uses context from first query)
+response2 = agent.process_query(
+    "Can you explain supervised learning in more detail?",
+    session_id="user123"
+)
+```
+
+### Tool Selection
+
+Specify which tool to use for a query:
+
+```python
+agent = SingleAgent()
+
+# Use a specific tool
+response = agent.process_query(
+    "Generate a Python function to sort a list",
+    tool_name="CodeGenerationTool"
+)
+```
+
+### Memory Insights
+
+Get insights about the agent's memory:
+
+```python
+agent = SingleAgent(use_titans_memory=True)
+
+# Process some queries
+agent.process_query("What is machine learning?", session_id="user123")
+agent.process_query("Explain neural networks", session_id="user123")
+
+# Get memory insights
+insights = agent.get_memory_insights()
+print(insights)
+```
 
 ## Contributing
 
@@ -375,11 +530,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-## Resources
+## Contact & Links
 
-- [Metis Agent Documentation](https://pypi.org/project/metis-agent/)
-- [PyPI Package](https://pypi.org/project/metis-agent/)
-- [Issue Tracker](https://github.com/metisos/metisos_agentV1/issues)
+- **PyPI Package**: [https://pypi.org/project/metis-agent/](https://pypi.org/project/metis-agent/)
+- **Starter Templates**: [https://github.com/metis-analytics/metis-starter](https://github.com/metis-analytics/metis-starter)
+- **Documentation**: [https://github.com/metis-analytics/metis-agent/wiki](https://github.com/metis-analytics/metis-agent/wiki)
+- **Issues & Support**: [https://github.com/metis-analytics/metis-agent/issues](https://github.com/metis-analytics/metis-agent/issues)
+- **Discussions**: [https://github.com/metis-analytics/metis-agent/discussions](https://github.com/metis-analytics/metis-agent/discussions)
 
 ---
 
