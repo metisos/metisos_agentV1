@@ -1,556 +1,495 @@
 # Metis Agent CLI Documentation
 
-The Metis Agent provides a comprehensive command-line interface (CLI) for interacting with AI agents, managing configurations, and handling authentication. This documentation covers all available commands and their usage.
+**Version:** v0.6.0  
+**Command:** `metis`
+
+The Metis Agent CLI provides a comprehensive command-line interface for AI-powered development, project management, and intelligent assistance. Built on natural language processing, it allows developers to interact with their projects using conversational commands.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Core Commands](#core-commands)
+- [Natural Language Code Interface](#natural-language-code-interface)
+- [Configuration Management](#configuration-management)
+- [Authentication](#authentication)
+- [Examples](#examples)
+- [Troubleshooting](#troubleshooting)
 
 ## Installation
 
-First, install the Metis Agent package:
-
 ```bash
+# Install Metis Agent
 pip install metis-agent
+
+# Verify installation
+metis --help
 ```
 
 ## Quick Start
 
-After installation, you can immediately start using the CLI:
-
 ```bash
-# Start interactive chat mode
+# Start interactive chat
 metis chat
 
 # Process a single query
-metis chat "Create a Python web app with FastAPI"
+metis chat "analyze this project structure"
 
-# Show help for all commands
-metis --help
+# Natural language coding
+metis code "create a FastAPI web server with authentication"
+
+# Interactive coding session
+metis code --interactive
 ```
 
-## Main Commands Overview
+## Core Commands
 
-The Metis CLI is organized into three main command groups:
-
-1. **`chat`** - Interactive AI assistant and query processing
-2. **`config`** - Configuration and agent identity management
-3. **`auth`** - API key and authentication management
-
----
-
-## Chat Commands
-
-### `metis chat`
-
-Start interactive chat mode with the AI agent.
-
-**Usage:**
-```bash
-metis chat [QUERY] [OPTIONS]
-```
-
-**Arguments:**
-- `QUERY` (optional) - Process a single query instead of entering interactive mode
-
-**Options:**
-- `--session, -s TEXT` - Session ID for maintaining conversation context
-
-**Examples:**
+### Main CLI Structure
 
 ```bash
-# Start interactive chat mode
-metis chat
-
-# Process a single query
-metis chat "Analyze the code in this directory"
-
-# Use a specific session for context
-metis chat --session "project-work" "Continue working on the API"
+metis [COMMAND] [OPTIONS] [ARGUMENTS]
 ```
 
-**Interactive Mode Features:**
+**Available Commands:**
+- `chat` - Interactive conversation with the AI agent
+- `code` - Natural language coding assistant
+- `config` - Configuration management
+- `auth` - API key and authentication management
 
-When you run `metis chat` without a query, you enter interactive mode with these features:
+## Natural Language Code Interface
 
-- **Natural Language Interface**: Just type your requests in plain English
-- **Project Context**: Automatically detects and shows current project information
-- **Session Management**: Maintains conversation context across interactions
-- **Special Commands**:
-  - `exit` or `quit` - Exit chat mode
-  - `session <name>` - Switch to a different session
-  - `clear` - Clear the screen
-  - `help` - Show help information
+The `metis code` command provides a revolutionary natural language interface for all coding tasks.
 
-**Example Interactive Session:**
-```
-$ metis chat
-Metis Agent - Interactive Mode
-Directory: /home/user/my-project
-Session: main
-Project: MyWebApp (Python, Flask, 25 files)
+### Basic Usage
 
-Just type your request in natural language!
-Examples:
-  - 'Create a Python web app with FastAPI'
-  - 'Analyze the code in this project'
-  - 'Search for information about quantum computing'
-  - 'Help me debug this error'
-
-[main] > Create a new API endpoint for user authentication
-[Agent processes request and provides response]
-
-[main] > session auth-work
-Switched to session: auth-work
-
-[auth-work] > exit
-Goodbye!
-```
-
----
-
-## Configuration Commands
-
-### `metis config`
-
-Manage agent configuration and settings.
-
-**Usage:**
 ```bash
-metis config COMMAND [OPTIONS]
+# Single request mode
+metis code "analyze this project and tell me about its structure"
+metis code "create a Python web app with FastAPI and authentication"
+metis code "refactor the calculate method in calculator.py"
+metis code "add error handling to all database operations"
+
+# Interactive mode
+metis code --interactive
+metis code -i
+
+# Auto mode (skip confirmations)
+metis code --auto "create a new file utils.py with helper functions"
+metis code -a "optimize the database queries in models.py"
 ```
 
-**Available Subcommands:**
-- `show` - Display current configuration
-- `set` - Set configuration values
-- `reset` - Reset configuration to defaults
-- `system-message` - Manage agent system messages
-- `show-identity` - Display agent identity information
-- `set-name` - Set the agent's name
-- `set-personality` - Set the agent's personality
-- `regenerate-identity` - Generate new agent identity
+### Advanced Features
 
-### `metis config show`
-
-Display the current agent configuration.
-
-**Usage:**
 ```bash
+# Session management
+metis code --session my-feature "implement user authentication"
+metis code -s backend-api "add API rate limiting"
+
+# Branch management
+metis code --branch feature-auth "implement OAuth2 authentication"
+metis code --no-branch "quick bug fix in utils.py"
+
+# Project creation
+metis code "create a complete Django e-commerce application"
+metis code "build a React dashboard with charts and analytics"
+```
+
+### Natural Language Examples
+
+The code command understands natural language requests:
+
+**Project Creation:**
+```bash
+metis code "create a FastAPI backend with PostgreSQL and JWT authentication"
+metis code "build a React frontend with TypeScript and Material-UI"
+metis code "make a Discord bot with slash commands and database integration"
+```
+
+**Code Analysis:**
+```bash
+metis code "analyze this codebase and identify potential security issues"
+metis code "review the performance of database queries in this project"
+metis code "find all TODO comments and create a task list"
+```
+
+**Code Generation:**
+```bash
+metis code "add comprehensive error handling to all API endpoints"
+metis code "create unit tests for the user authentication module"
+metis code "implement caching for frequently accessed data"
+```
+
+**Refactoring:**
+```bash
+metis code "refactor this class to follow SOLID principles"
+metis code "optimize the database schema for better performance"
+metis code "modernize this legacy code to use current best practices"
+```
+
+### Intelligent Features
+
+- **Project Detection**: Automatically detects project type and context
+- **Branch Creation**: Creates feature branches for significant changes
+- **Code Extraction**: Saves generated code to appropriate files
+- **Git Integration**: Auto-commits changes with descriptive messages
+- **Multi-Phase Workflows**: Handles complex project development in phases
+
+## Configuration Management
+
+### Configuration Commands
+
+```bash
+# Show current configuration
 metis config show
-```
 
-**Example Output:**
-```
-Current Configuration:
-  LLM Provider: groq
-  LLM Model: llama3-70b-8192
-  Memory System: titans
-  Enhanced Processing: enabled
-  Agent ID: metis-12345
-  Agent Name: Assistant
-```
-
-### `metis config set KEY VALUE`
-
-Set a configuration value.
-
-**Usage:**
-```bash
-metis config set KEY VALUE
-```
-
-**Available Configuration Keys:**
-- `llm_provider` - LLM provider (openai, groq, anthropic, huggingface)
-- `llm_model` - Model name for the selected provider
-- `memory_system` - Memory system (sqlite, titans)
-- `enhanced_processing` - Enable/disable enhanced processing (true/false)
-
-**Examples:**
-```bash
-# Set LLM provider to OpenAI
+# Set configuration values
+metis config set <key> <value>
 metis config set llm_provider openai
+metis config set memory_enabled true
 
-# Set model to GPT-4
-metis config set llm_model gpt-4
-
-# Enable Titans memory
-metis config set memory_system titans
-
-# Disable enhanced processing
-metis config set enhanced_processing false
-```
-
-### `metis config system-message`
-
-Manage the agent's system message (base instructions).
-
-**Usage:**
-```bash
-metis config system-message [OPTIONS]
-```
-
-**Options:**
-- `--file PATH` - Load system message from a file
-- `--interactive` - Enter system message interactively
-- `--layer TEXT` - Specify layer (base or custom) [default: base]
-
-**Examples:**
-```bash
-# Set system message from file
-metis config system-message --file system_prompt.txt
-
-# Enter system message interactively
-metis config system-message --interactive
-
-# Set custom layer system message
-metis config system-message --interactive --layer custom
-```
-
-### `metis config show-identity`
-
-Display agent identity information.
-
-**Usage:**
-```bash
+# Agent identity management
 metis config show-identity
-```
-
-**Example Output:**
-```
-Agent Identity:
-  ID: metis-12345
-  Name: Assistant
-  Custom Personality: You are a helpful coding assistant specialized in Python development...
-```
-
-### `metis config set-name NAME`
-
-Set the agent's display name.
-
-**Usage:**
-```bash
-metis config set-name NAME
-```
-
-**Example:**
-```bash
-metis config set-name "CodeHelper"
-```
-
-### `metis config set-personality`
-
-Set the agent's personality (custom system message).
-
-**Usage:**
-```bash
-metis config set-personality [OPTIONS]
-```
-
-**Options:**
-- `--file PATH` - Load personality from a file
-- `--interactive` - Enter personality interactively
-
-**Examples:**
-```bash
-# Set personality from file
-metis config set-personality --file personality.txt
-
-# Enter personality interactively
+metis config set-name "MyAgent"
 metis config set-personality --interactive
-```
+metis config regenerate-identity
 
-### `metis config reset`
-
-Reset all configuration to default values.
-
-**Usage:**
-```bash
+# Reset to defaults
 metis config reset
 ```
 
-**Note:** This will reset all settings but preserve your API keys and agent identity.
+### System Message Management
 
-### `metis config regenerate-identity`
-
-Generate a new agent identity (ID and name).
-
-**Usage:**
 ```bash
-metis config regenerate-identity
+# Set system message from file
+metis config set-system-message --file system_prompt.txt
+
+# Interactive system message setup
+metis config set-system-message --interactive
+
+# Set agent personality
+metis config set-personality --file personality.txt
+metis config set-personality --interactive
 ```
 
-**Note:** This creates a new agent ID and generates a new random name while preserving your custom personality settings.
+## Authentication
 
----
+### API Key Management
 
-## Authentication Commands
-
-### `metis auth`
-
-Manage API keys and authentication for various LLM providers.
-
-**Usage:**
 ```bash
-metis auth COMMAND [OPTIONS]
-```
+# Set API keys
+metis auth set openai sk-your-key-here
+metis auth set groq gsk-your-key-here
+metis auth set anthropic your-key-here
 
-**Available Subcommands:**
-- `set` - Set an API key for a service
-- `list` - List configured API keys
-- `remove` - Remove an API key
-- `test` - Test API key connectivity
-
-### `metis auth set SERVICE [KEY]`
-
-Set an API key for a specific service.
-
-**Usage:**
-```bash
-metis auth set SERVICE [KEY]
-```
-
-**Supported Services:**
-- `openai` - OpenAI API
-- `groq` - Groq API (recommended for free usage)
-- `anthropic` - Anthropic Claude API
-- `huggingface` - HuggingFace API
-- `google` - Google AI API
-
-**Examples:**
-```bash
-# Set API key with prompt (secure input)
-metis auth set openai
-
-# Set API key directly (less secure)
-metis auth set groq your-api-key-here
-```
-
-**Security Note:** When you don't provide the key as an argument, you'll be prompted to enter it securely (hidden input).
-
-### `metis auth list`
-
-List all configured API keys (shows service names only, not the actual keys).
-
-**Usage:**
-```bash
+# List configured keys
 metis auth list
-```
 
-**Example Output:**
-```
-Configured API keys:
-  openai
-  groq
-  anthropic
-```
-
-### `metis auth remove SERVICE`
-
-Remove an API key for a specific service.
-
-**Usage:**
-```bash
-metis auth remove SERVICE
-```
-
-**Example:**
-```bash
+# Remove API key
 metis auth remove openai
-```
 
-### `metis auth test [SERVICE]`
-
-Test API key connectivity for one or all services.
-
-**Usage:**
-```bash
-metis auth test [SERVICE]
-```
-
-**Examples:**
-```bash
-# Test all configured API keys
+# Test API connectivity
 metis auth test
-
-# Test specific service
 metis auth test openai
 ```
 
----
+### Supported Services
 
-## Common Workflows
+- **OpenAI**: `openai`
+- **Groq**: `groq`
+- **Anthropic**: `anthropic`
+- **Google**: `google`
+- **Hugging Face**: `huggingface`
+- **E2B Code Sandbox**: `e2b`
+- **Firecrawl**: `firecrawl`
 
-### Initial Setup
+## Examples
 
-1. **Install the package:**
-   ```bash
-   pip install metis-agent
-   ```
+### Complete Workflow Examples
 
-2. **Set up your API key (Groq is recommended for free usage):**
-   ```bash
-   metis auth set groq
-   ```
-
-3. **Configure the agent to use Groq:**
-   ```bash
-   metis config set llm_provider groq
-   metis config set llm_model llama3-70b-8192
-   ```
-
-4. **Start chatting:**
-   ```bash
-   metis chat
-   ```
-
-### Switching Between Providers
-
+**1. Creating a New Web Application:**
 ```bash
-# Switch to OpenAI
-metis auth set openai
-metis config set llm_provider openai
-metis config set llm_model gpt-4
+# Generate project
+metis code "create a FastAPI backend with user authentication and PostgreSQL"
 
-# Switch to Anthropic
-metis auth set anthropic
-metis config set llm_provider anthropic
-metis config set llm_model claude-3-sonnet-20240229
+# Add features
+metis code "add API rate limiting and request validation"
+
+# Test the application
+metis code "create comprehensive tests for all endpoints"
 ```
 
-### Customizing Your Agent
-
+**2. Working with Existing Project:**
 ```bash
-# Set a custom name
-metis config set-name "DevAssistant"
+# Analyze existing codebase
+metis chat "analyze this project and suggest improvements"
 
-# Set a custom personality
-metis config set-personality --interactive
-# Then enter: "You are a senior software engineer specializing in Python and web development..."
+# Make improvements
+metis code "optimize database queries and add caching"
 
-# View your customizations
-metis config show-identity
+# Add documentation
+metis code "create comprehensive API documentation"
 ```
 
-### Project-Specific Sessions
-
+**3. Interactive Development Session:**
 ```bash
-# Work on different projects with separate contexts
-metis chat --session "webapp-project" "Help me design the database schema"
-metis chat --session "ml-project" "Explain this neural network architecture"
+# Start interactive session
+metis code --interactive
+
+# In the session:
+# > "I want to add user authentication to this Flask app"
+# > "also add password reset functionality"
+# > "create comprehensive tests for the auth system"
+# > "exit"
 ```
 
----
+### Natural Language Examples
 
-## Environment Variables
-
-You can also set configuration through environment variables:
-
-- `METIS_LLM_PROVIDER` - Default LLM provider
-- `METIS_LLM_MODEL` - Default LLM model
-- `METIS_MEMORY_SYSTEM` - Default memory system
-- `OPENAI_API_KEY` - OpenAI API key
-- `GROQ_API_KEY` - Groq API key
-- `ANTHROPIC_API_KEY` - Anthropic API key
-- `HUGGINGFACE_API_KEY` - HuggingFace API key
-
-**Example:**
+**Project Creation:**
 ```bash
-export GROQ_API_KEY="your-groq-api-key"
-export METIS_LLM_PROVIDER="groq"
-metis chat "Hello!"
+metis code "create a complete e-commerce platform with React frontend and Node.js backend"
+metis code "build a data analysis dashboard with Python, Pandas, and Plotly"
+metis code "make a real-time chat application with WebSockets"
 ```
 
----
+**Code Analysis and Improvement:**
+```bash
+metis code "analyze this codebase for security vulnerabilities"
+metis code "refactor this monolith into microservices"
+metis code "add comprehensive error handling and logging"
+metis code "optimize performance and reduce memory usage"
+```
+
+**Specific Tasks:**
+```bash
+metis code "implement OAuth2 authentication with Google and GitHub"
+metis code "add database migrations and seed data"
+metis code "create API documentation with Swagger/OpenAPI"
+metis code "set up CI/CD pipeline with GitHub Actions"
+```
+
+## Advanced Features
+
+### Multi-Phase Development
+
+For complex projects, Metis automatically breaks down work into phases:
+
+1. **Planning Phase**: Analyzes requirements and creates development plan
+2. **Implementation Phase**: Generates code and project structure
+3. **Testing Phase**: Creates tests and validation
+4. **Documentation Phase**: Generates documentation and README
+5. **Deployment Phase**: Sets up deployment configuration
+
+### Blueprint Workflows
+
+Metis includes pre-built blueprints for common development patterns:
+
+- **Code Generation**: Intelligent code creation and modification
+- **API Development**: RESTful API with authentication
+- **Frontend Applications**: Modern web applications
+- **Data Analysis**: Analysis and visualization workflows
+
+### Intelligent Context Awareness
+
+- **Code Pattern Recognition**: Understands existing code patterns
+- **Context Understanding**: Analyzes current working directory
+- **Session Memory**: Maintains context across interactions
+- **Natural Language Processing**: Interprets complex development requests
+
+## Configuration
+
+### Environment Variables
+
+```bash
+# API Keys (recommended to use .env.local file)
+OPENAI_API_KEY=your-openai-key
+GROQ_API_KEY=your-groq-key
+ANTHROPIC_API_KEY=your-anthropic-key
+E2B_API_KEY=your-e2b-key
+FIRECRAWL_API_KEY=your-firecrawl-key
+GOOGLE_API_KEY=your-google-key
+```
+
+### Configuration File
+
+Metis stores configuration in `~/.metis/config.json`:
+
+```json
+{
+  "llm_provider": "groq",
+  "llm_model": "llama-3.1-8b-instant",
+  "memory_enabled": true,
+  "titans_memory": true,
+  "enhanced_processing": true,
+  "agent_identity": {
+    "agent_id": "metis-abc123",
+    "agent_name": "CustomAgent",
+    "custom_system_message": "..."
+  }
+}
+```
 
 ## Troubleshooting
 
 ### Common Issues
 
-**1. "No API key configured" error:**
+**1. Command Not Found:**
 ```bash
-# Solution: Set up an API key
-metis auth set groq
+# Ensure Metis is installed
+pip install metis-agent
+
+# Check if it's in PATH
+which metis  # Linux/Mac
+where metis  # Windows
 ```
 
-**2. "Invalid API key" error:**
+**2. API Key Issues:**
 ```bash
-# Solution: Test and reset your API key
-metis auth test groq
-metis auth set groq
+# Set API keys
+metis auth set openai your-key-here
+
+# Test connectivity
+metis auth test
+
+# Check configuration
+metis config show
 ```
 
-**3. "Command not found: metis":**
+**3. Code Generation Issues:**
 ```bash
-# Solution: Reinstall or check your PATH
-pip install --upgrade metis-agent
+# Test with simple request
+metis code "create a simple hello world script"
+
+# Check if in correct directory
+pwd
+ls -la
 ```
 
-**4. Configuration issues:**
+### Debug Mode
+
 ```bash
-# Solution: Reset configuration
-metis config reset
+# Enable verbose output
+export METIS_DEBUG=1
+metis code "your request"
+
+# Check logs
+metis config show
 ```
 
 ### Getting Help
 
-- Use `metis --help` for general help
-- Use `metis COMMAND --help` for command-specific help
-- Use `metis config show` to check current settings
-- Use `metis auth list` to check configured API keys
+```bash
+# General help
+metis --help
+
+# Command-specific help
+metis code --help
+metis config --help
+metis auth --help
+
+# Interactive help
+metis chat "how do I use the code command?"
+```
+
+## Best Practices
+
+### 1. Code Organization
+
+- Use descriptive file and variable names
+- Organize code into logical modules
+- Follow language-specific best practices
+- Use environment variables for API keys
+
+### 2. Natural Language Commands
+
+- Be specific about requirements
+- Mention technology preferences
+- Include context about existing code
+- Ask for explanations when needed
+
+### 3. Session Management
+
+- Use sessions for related work
+- Name sessions descriptively
+- Switch sessions for different features
+- Clean up old sessions periodically
+
+### 4. Security
+
+- Never commit API keys to version control
+- Use environment variables or .env.local files
+- Review generated code before deployment
+- Validate all user inputs in generated code
+
+### 5. Development Workflow
+
+- Start with clear requirements
+- Use interactive mode for complex tasks
+- Test generated code thoroughly
+- Iterate and refine based on results
+
+## Integration with IDEs
+
+### VS Code Integration
+
+Metis CLI works seamlessly with VS Code:
+
+```bash
+# Open project in VS Code after generation
+metis code "create a React app" && code .
+
+# Use integrated terminal
+# Ctrl+` to open terminal, then use metis commands
+```
+
+### Terminal Integration
+
+```bash
+# Add to shell profile for aliases
+alias mc="metis code"
+alias mch="metis chat"
+alias mconf="metis config"
+
+# Use with other tools
+metis code "analyze this code" && echo "Analysis complete"
+metis chat "explain this error" && echo "Help provided"
+```
+
+## Updates and Maintenance
+
+### Keeping Metis Updated
+
+```bash
+# Update to latest version
+pip install --upgrade metis-agent
+
+# Check version
+metis --version
+
+# Check for new features
+metis chat "what's new in the latest version?"
+```
+
+### Configuration Backup
+
+```bash
+# Backup configuration
+cp ~/.metis/config.json ~/.metis/config.backup.json
+
+# Restore configuration
+cp ~/.metis/config.backup.json ~/.metis/config.json
+```
 
 ---
 
-## Advanced Usage
+## Support and Community
 
-### Batch Processing
-
-Process multiple queries from a file:
-```bash
-# Create a file with queries
-echo "Explain Python decorators" > queries.txt
-echo "Create a REST API example" >> queries.txt
-
-# Process each query
-while read query; do
-  metis chat "$query" --session "batch-$(date +%s)"
-done < queries.txt
-```
-
-### Integration with Scripts
-
-Use Metis in shell scripts:
-```bash
-#!/bin/bash
-# analyze_project.sh
-
-echo "Analyzing project structure..."
-result=$(metis chat "Analyze the code structure in this directory and suggest improvements")
-echo "$result" > analysis_report.txt
-echo "Analysis complete. Report saved to analysis_report.txt"
-```
-
-### Custom System Messages
-
-Create reusable personality files:
-```bash
-# Create a specialist personality
-cat > python_expert.txt << EOF
-You are a Python expert with 10+ years of experience. You specialize in:
-- Clean, Pythonic code
-- Performance optimization
-- Best practices and design patterns
-- Testing and debugging
-Always provide practical, production-ready solutions.
-EOF
-
-# Apply the personality
-metis config set-personality --file python_expert.txt
-```
+- **Documentation**: [Official Docs](https://metis-agent.readthedocs.io)
+- **GitHub**: [metis-agent/metis-agent](https://github.com/metis-agent/metis-agent)
+- **Issues**: Report bugs and request features on GitHub
+- **Discussions**: Community discussions and Q&A
 
 ---
 
-## API Integration
-
-The CLI commands can be integrated into larger workflows and automation systems. All commands return appropriate exit codes for script integration:
-
-- `0` - Success
-- `1` - General error
-- `2` - Invalid arguments
-
-This makes it easy to use Metis CLI in CI/CD pipelines, automation scripts, and other development workflows.
+**Version**: v0.6.0  
+**Last Updated**: August 2025  
+**License**: Apache License 2.0
