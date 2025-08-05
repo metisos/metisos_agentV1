@@ -25,6 +25,7 @@ wheels/
 *.egg
 MANIFEST
 setup.py
+arc_metis.py
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -129,6 +130,7 @@ dmypy.json
 # Metis Agent specific
 memory.db
 memory/
+planning_docs/
 tasks.md
 .api_keys.json
 

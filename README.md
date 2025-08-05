@@ -5,37 +5,68 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](https://opensource.org/licenses/Apache-2.0)
 [![Downloads](https://pepy.tech/badge/metis-agent)](https://pepy.tech/project/metis-agent)
 
-A powerful, modular framework for building AI agents with minimal boilerplate code. Metis Agent provides a comprehensive toolkit for creating intelligent agents that can understand user queries, plan and execute complex tasks, and leverage specialized tools.
+A powerful, modular framework for building AI agents with intelligent memory management and minimal boilerplate code. Metis Agent provides a comprehensive toolkit for creating intelligent agents that can understand user queries, plan and execute complex tasks, and maintain persistent conversations.
 
-**Latest Release: v0.2.2** - Enhanced custom tools system, comprehensive templates, MCP tool architecture, and production-ready features.
+**Latest Release: v0.6.0** - Major expansion with secure code execution, advanced tools, and enterprise-grade capabilities.
 
-### What's New in v0.2.2
-- **Enhanced Custom Tools System** - Complete framework for custom tool development
-- **Comprehensive Templates** - 6 production-ready templates for different use cases
-- **MCP Tool Architecture** - Enhanced tool system with performance monitoring
-- **Smart Orchestrator** - Advanced task tracking and planning capabilities
-- **Security Improvements** - Enhanced credential management and validation
-- **Windows Compatibility** - Full support for Windows development environments
+### What's New in v0.6.0
+- ** E2B Code Sandbox** - Secure Python code execution in isolated cloud environments
+- ** 36+ Advanced Tools** - Comprehensive toolkit for development, research, and analysis
+- ** Smart Orchestrator** - Intelligent tool selection with parameter extraction
+- ** Enhanced Analytics** - Advanced memory management with Titans-inspired system
+- ** Enterprise Ready** - MCP integration, blueprint system, and production APIs
+- ** Performance Optimized** - Improved query analysis and execution strategies
+- ** Developer Focused** - Git integration, project management, and automated workflows
 
 ## Features
 
-- **Modular Architecture**: Clean separation of concerns with specialized components
-- **Multiple LLM Providers**: Seamless integration with OpenAI, Groq, Anthropic, and HuggingFace
-- **Secure API Key Management**: Safely store and retrieve API keys
-- **Advanced Memory Systems**: 
-  - SQLite-based persistent memory
-  - Titans-inspired adaptive memory with context-aware retrieval
-- **Specialized Tools**: Ready-to-use tools for common tasks:
-  - Code generation
-  - Content creation
-  - Web search
-  - Web scraping (Firecrawl integration)
-- **Task Planning and Execution**: Break down complex tasks into manageable subtasks
-- **Intent Classification**: Automatically determine if a query is a question or task
-- **Multiple Interfaces**: 
-  - Python API for direct integration
-  - Command-line interface for quick access
-  - Web server for API-based interaction
+###  **Core Architecture**
+- **Smart Orchestrator**: Intelligent tool selection with parameter extraction and execution strategies
+- **Enhanced Memory System**: Titans-inspired adaptive memory with token-aware context management
+- **Query Analyzer**: LLM-powered complexity analysis for optimal tool routing
+- **Session Management**: Persistent conversations with automatic context preservation
+
+###  **LLM Integration**
+- **Multiple Providers**: OpenAI, Groq, Anthropic, HuggingFace with seamless switching
+- **Model Flexibility**: Support for GPT-4, Claude, Llama, Mixtral, and custom models
+- **Secure Authentication**: Encrypted API key management with environment fallback
+
+###  **Advanced Tool Suite (36+ Tools)**
+
+#### ** Security & Execution**
+- **E2B Code Sandbox**: Secure Python execution in isolated cloud environments
+- **Bash Tool**: Safe system command execution with output capture
+
+#### ** Development Tools**
+- **Git Integration**: Complete workflow management (clone, commit, push, merge, etc.)
+- **Code Generation**: Multi-language code creation with best practices
+- **Unit Test Generator**: Automated test creation with comprehensive coverage
+- **Dependency Analyzer**: Project dependency analysis and optimization
+- **Project Management**: Full lifecycle management with validation
+
+#### ** Research & Analysis**
+- **Deep Research**: Multi-source research with citation management
+- **Data Analysis**: Advanced analytics with pandas, numpy, visualization
+- **Web Scraper**: Intelligent content extraction with Firecrawl integration
+- **Google Search**: Real-time web search with result processing
+
+#### ** Content & Communication**
+- **Content Generation**: Multi-format content creation (blogs, docs, emails)
+- **Text Analyzer**: Advanced NLP analysis with sentiment and entity recognition
+- **Blueprint Execution**: Automated workflow and process execution
+
+#### ** File & System Operations**
+- **File Manager**: Complete file system operations with safety checks
+- **Read/Write Tools**: Intelligent file handling with format detection
+- **Grep Tool**: Advanced search with regex and pattern matching
+
+###  **Enterprise Features**
+- **MCP Integration**: Model Context Protocol server support
+- **Blueprint System**: Workflow automation and process management
+- **CLI Interface**: Comprehensive command-line tools for all operations
+- **Web API**: RESTful endpoints for integration and automation
+- **Memory Analytics**: Real-time performance monitoring and insights
+- **Tool Registry**: Dynamic tool discovery and registration system
 
 ## Installation
 
@@ -100,6 +131,41 @@ agent = SingleAgent()
 
 # Process a query
 response = agent.process_query("Explain quantum computing in simple terms")
+print(response)
+```
+
+### Secure Code Execution with E2B
+
+```python
+from metis_agent import SingleAgent
+
+# Create an agent (E2B tool auto-detected)
+agent = SingleAgent()
+
+# Execute Python code securely in cloud sandbox
+response = agent.process_query("""
+Execute this Python code:
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Create sample data
+data = {'x': [1, 2, 3, 4, 5], 'y': [2, 4, 6, 8, 10]}
+df = pd.DataFrame(data)
+
+# Create visualization
+plt.figure(figsize=(8, 6))
+plt.plot(df['x'], df['y'], marker='o')
+plt.title('Sample Data Visualization')
+plt.xlabel('X values')
+plt.ylabel('Y values')
+plt.show()
+
+print(f"Data shape: {df.shape}")
+print(df.describe())
+```
+""")
+
 print(response)
 ```
 
@@ -185,6 +251,7 @@ metis agent delete CodeExpert
 metis auth set-key openai sk-your-openai-key
 metis auth set-key groq gsk_your-groq-key
 metis auth set-key anthropic your-anthropic-key
+metis auth set-key e2b your-e2b-api-key
 
 # List configured API keys (shows providers only, not keys)
 metis auth list-keys
@@ -194,6 +261,19 @@ metis auth remove-key openai
 
 # Test API key connectivity
 metis auth test openai
+```
+
+### E2B Code Sandbox Setup
+
+```bash
+# Set E2B API key for secure code execution
+metis auth set-key e2b your-e2b-api-key
+
+# Test E2B connectivity
+metis auth test e2b
+
+# Execute code in sandbox via CLI
+metis chat "Execute this Python code: print('Hello from E2B sandbox!')"
 ```
 
 ### Tool Management
@@ -410,12 +490,49 @@ response = llm.chat([{"role": "user", "content": "Hello!"}])
 
 ### Tools
 
-Available tools:
+Available tools (36+ advanced tools):
 
-- `CodeGenerationTool`: Generates code based on requirements
-- `ContentGenerationTool`: Creates various types of content
-- `GoogleSearchTool`: Performs web searches
-- `FirecrawlTool`: Scrapes and analyzes web content
+#### **Security & Execution**
+- `E2BCodeSandboxTool`: Secure Python code execution in isolated cloud environments
+- `BashTool`: Safe system command execution with output capture
+
+#### **Development & Code**
+- `GitIntegrationTool`: Complete Git workflow management
+- `CodeGenerationTool`: Multi-language code generation with best practices
+- `PythonCodeTool`: Python-specific code analysis and execution
+- `UnitTestGeneratorTool`: Automated test creation with comprehensive coverage
+- `DependencyAnalyzerTool`: Project dependency analysis and optimization
+- `EditTool`: Intelligent code editing with context awareness
+
+#### **Research & Analysis**
+- `DeepResearchTool`: Multi-source research with citation management
+- `DataAnalysisTool`: Advanced analytics with pandas, numpy, visualization
+- `GoogleSearchTool`: Real-time web search with result processing
+- `WebScraperTool`: Intelligent content extraction
+- `FirecrawlTool`: Advanced web scraping and content analysis
+- `TextAnalyzerTool`: NLP analysis with sentiment and entity recognition
+
+#### **Content & Communication**
+- `ContentGenerationTool`: Multi-format content creation (blogs, docs, emails)
+- `ConversationManagerTool`: Advanced dialogue management
+
+#### **Project & Workflow Management**
+- `ProjectManagementTool`: Full project lifecycle management
+- `ProjectValidationTool`: Automated project validation and quality checks
+- `BlueprintExecutionTool`: Workflow automation and process execution
+- `RequirementsAnalysisTool`: Automated requirements gathering and analysis
+- `ToolGeneratorTool`: Dynamic tool creation and customization
+
+#### **File & System Operations**
+- `FileManagerTool`: Complete file system operations with safety checks
+- `FilesystemTool`: Advanced file system navigation and management
+- `ReadTool`: Intelligent file reading with format detection
+- `WriteTool`: Smart file writing with backup and validation
+- `GrepTool`: Advanced search with regex and pattern matching
+
+#### **Mathematical & Scientific**
+- `AdvancedMathTool`: Complex mathematical computations and analysis
+- `CalculatorTool`: Mathematical calculations with expression parsing
 
 Creating custom tools:
 

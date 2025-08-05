@@ -1,18 +1,27 @@
-# Custom Tools Development Guide
+# Custom Tools Development Guide - Metis Agent v0.6.0
 
 ## Overview
 
-The Metis Agent Framework allows users to create and register custom tools to extend agent capabilities for specific use cases. This guide demonstrates how to build, register, and integrate custom tools with your agents.
+The Metis Agent Framework v0.6.0 allows users to create and register custom tools to extend agent capabilities for specific use cases. This guide demonstrates how to build, register, and integrate custom tools with your agents using the latest v0.6.0 architecture.
+
+**New in v0.6.0:**
+- Enhanced BaseTool with performance monitoring
+- ComposableTool for tool chaining and pipelines
+- Advanced capability metadata system
+- Query analysis and compatibility scoring
+- Resource monitoring and optimization
 
 ## Table of Contents
 
 1. [Custom Tool Architecture](#custom-tool-architecture)
-2. [Creating Custom Tools](#creating-custom-tools)
-3. [Tool Registration](#tool-registration)
-4. [Agent Integration](#agent-integration)
-5. [Advanced Features](#advanced-features)
-6. [Best Practices](#best-practices)
-7. [Examples](#examples)
+2. [v0.6.0 Enhanced Features](#v060-enhanced-features)
+3. [Creating Custom Tools](#creating-custom-tools)
+4. [Tool Registration](#tool-registration)
+5. [Agent Integration](#agent-integration)
+6. [Advanced Features](#advanced-features)
+7. [Performance Monitoring](#performance-monitoring)
+8. [Best Practices](#best-practices)
+9. [Examples](#examples)
 
 ## Custom Tool Architecture
 
@@ -40,6 +49,88 @@ class MyCustomTool(BaseTool):
         """Execute the tool's functionality"""
         # Implementation here
         pass
+    
+    def get_capabilities(self) -> Dict[str, Any]:
+        """Return tool capabilities metadata (v0.6.0 feature)"""
+        return {
+            "complexity_levels": ["simple", "moderate", "complex"],
+            "input_types": ["text"],
+            "output_types": ["structured_data"],
+            "requires_internet": False,
+            "requires_filesystem": False,
+            "concurrent_safe": True,
+            "resource_intensive": False,
+            "supported_intents": [],
+            "api_dependencies": []
+        }
+```
+
+## v0.6.0 Enhanced Features
+
+### Performance Monitoring
+
+v0.6.0 introduces built-in performance monitoring for all tools:
+
+```python
+class MyTool(BaseTool):
+    def execute(self, task: str, **kwargs) -> Dict[str, Any]:
+        # Use execute_with_monitoring for automatic performance tracking
+        return self.execute_with_monitoring(task, **kwargs)
+    
+    def _actual_execute(self, task: str, **kwargs) -> Dict[str, Any]:
+        # Your actual implementation here
+        return {"success": True, "data": "result"}
+```
+
+### Capability Metadata System
+
+Tools can now declare their capabilities for intelligent routing:
+
+```python
+def get_capabilities(self) -> Dict[str, Any]:
+    return {
+        "complexity_levels": ["simple", "moderate", "complex"],
+        "input_types": ["text", "json", "file"],
+        "output_types": ["structured_data", "file", "visualization"],
+        "estimated_execution_time": "1-5s",
+        "requires_internet": True,
+        "requires_filesystem": False,
+        "concurrent_safe": True,
+        "resource_intensive": False,
+        "supported_intents": ["data_analysis", "visualization"],
+        "api_dependencies": ["openai", "groq"],
+        "memory_usage": "medium"
+    }
+```
+
+### ComposableTool for Advanced Workflows
+
+Inherit from `ComposableTool` for tools that can be chained:
+
+```python
+from metis_agent.tools.base import ComposableTool
+
+class ChainableTool(ComposableTool):
+    def get_input_schema(self) -> Dict[str, Any]:
+        return {
+            "type": "object",
+            "properties": {
+                "data": {"type": "array"},
+                "operation": {"type": "string"}
+            },
+            "required": ["data"]
+        }
+    
+    def get_output_schema(self) -> Dict[str, Any]:
+        return {
+            "type": "object",
+            "properties": {
+                "success": {"type": "boolean"},
+                "processed_data": {"type": "array"},
+                "metadata": {"type": "object"}
+            },
+            "required": ["success", "processed_data"]
+        }
 ```
 
 ### Required Methods
@@ -49,10 +140,11 @@ class MyCustomTool(BaseTool):
    - Should return `True` if the tool is suitable for the task
    - Use keyword matching, pattern recognition, or NLP
 
-2. **`execute(task: str, **kwargs) -> Dict[str, Any]`**
+2. **`execute(task: str, **kwargs) -> Any`**
    - Executes the tool's main functionality
-   - Must return a dictionary with `success` key
+   - Can return any type, but Dict[str, Any] is recommended for consistency
    - Should include error handling and meaningful responses
+   - In v0.6.0, consider using `execute_with_monitoring()` for performance tracking
 
 ### Response Format
 
@@ -382,11 +474,67 @@ class ConfigurableTool(BaseTool):
         pass
 ```
 
+## Performance Monitoring
+
+### v0.6.0 Built-in Monitoring
+
+v0.6.0 provides automatic performance monitoring for all tools:
+
+```python
+class MonitoredTool(BaseTool):
+    def execute(self, task: str, **kwargs) -> Dict[str, Any]:
+        # This automatically tracks execution time, memory usage, and API calls
+        return self.execute_with_monitoring(task, **kwargs)
+    
+    def _actual_execute(self, task: str, **kwargs) -> Dict[str, Any]:
+        # Your implementation here - monitoring is handled automatically
+        return {
+            "success": True,
+            "data": "processed result",
+            "tool_used": self.name
+        }
+```
+
+### Custom Performance Metrics
+
+Override monitoring methods for custom metrics:
+
+```python
+class CustomMetricsTool(BaseTool):
+    def __init__(self):
+        super().__init__()
+        self.api_calls = 0
+    
+    def _get_api_call_count(self) -> int:
+        """Override to track API calls"""
+        return self.api_calls
+    
+    def execute(self, task: str, **kwargs) -> Dict[str, Any]:
+        self.api_calls += 1  # Track API usage
+        return self.execute_with_monitoring(task, **kwargs)
+```
+
+### Resource Requirements
+
+Declare resource requirements in capabilities:
+
+```python
+def get_capabilities(self) -> Dict[str, Any]:
+    return {
+        "memory_usage": "high",  # low, medium, high
+        "resource_intensive": True,
+        "estimated_execution_time": "10-30s",
+        "concurrent_safe": False,  # Can't run multiple instances
+        "requires_internet": True,
+        "api_dependencies": ["openai", "anthropic"]
+    }
+```
+
 ## Best Practices
 
 ### 1. Error Handling
 
-Always include comprehensive error handling:
+Always implement comprehensive error handling:
 
 ```python
 def execute(self, task: str, **kwargs) -> Dict[str, Any]:
@@ -525,20 +673,24 @@ if __name__ == "__main__":
 See `custom_tools_template.py` for a complete working example that demonstrates:
 
 - Multiple custom tool types (Weather, Database, API)
-- Tool registration and integration
-- Agent configuration with custom tools
-- Advanced workflow tools
+- Tool registration and integration with v0.6.0 features
+- Agent configuration with enhanced memory and multi-provider LLM support
+- Advanced workflow tools and tool chaining
+- Performance monitoring and capability metadata
 - Error handling and validation
+- Environment loading and API key management
 - Testing and usage examples
 
 ## Next Steps
 
 1. **Identify Your Use Case**: Determine what specific functionality you need
 2. **Design Your Tool**: Plan the interface and functionality
-3. **Implement Following Standards**: Use the BaseTool interface
-4. **Test Thoroughly**: Create comprehensive tests
-5. **Integrate with Agent**: Register and configure with your agent
-6. **Monitor and Iterate**: Track usage and improve over time
+3. **Implement Following v0.6.0 Standards**: Use the BaseTool or ComposableTool interface
+4. **Add Capability Metadata**: Define your tool's capabilities for intelligent routing
+5. **Implement Performance Monitoring**: Use execute_with_monitoring for tracking
+6. **Test Thoroughly**: Create comprehensive tests including performance tests
+7. **Integrate with Agent**: Register and configure with your agent
+8. **Monitor and Iterate**: Track usage, performance, and improve over time
 
 ## Support
 
@@ -549,4 +701,11 @@ For questions or issues with custom tool development:
 3. Test with simple tools first before building complex ones
 4. Follow the error handling and validation patterns shown
 
-Custom tools are a powerful way to extend Metis Agent capabilities for your specific needs!
+Custom tools are a powerful way to extend Metis Agent v0.6.0 capabilities for your specific needs!
+
+**v0.6.0 brings enhanced capabilities:**
+- Performance monitoring and optimization
+- Advanced tool chaining and composition
+- Intelligent routing based on capability metadata
+- Resource management and monitoring
+- Integration with 36+ built-in tools

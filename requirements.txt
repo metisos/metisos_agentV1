@@ -20,6 +20,7 @@ sqlite3  # Built into Python
 # Development and testing
 pytest>=7.4.0
 pytest-cov>=4.1.0
+e2b>=0.1.0
 
 # Optional: Enhanced features
 psutil>=5.9.0  # For performance monitoring

@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 """
-Custom Tools Template - Metis Agent Framework
+Custom Tools Template - Metis Agent Framework v0.6.0
 
 This template demonstrates how users can create and register their own custom tools
-to extend agent capabilities for specific use cases.
+to extend agent capabilities for specific use cases in v0.6.0.
 
 Features:
-- Custom tool creation following Metis standards
-- Tool registration and integration
-- Agent configuration with custom tools
-- Example usage scenarios
+- Custom tool creation following Metis v0.6.0 standards
+- Tool registration and integration with 36+ built-in tools
+- Agent configuration with enhanced memory and E2B integration
+- Multi-tool workflows and chaining capabilities
+- Secure API key management and environment loading
+- Example usage scenarios with real-world applications
 
 Author: Metis Agent Framework
-Version: 1.0.0
+Version: 0.6.0
 """
 
 import os
@@ -21,6 +23,7 @@ import json
 import requests
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from dotenv import load_dotenv
 
 # Add the metis_agent directory to Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'metis_agent'))
@@ -282,9 +285,11 @@ class CustomToolRegistry:
 # ============================================================
 
 def create_agent_with_custom_tools():
-    """Create an agent with custom tools"""
+    """
+    Create an agent with custom tools and v0.6.0 capabilities
+    """
     
-    print("Creating Agent with Custom Tools...")
+    print("[AGENT] Creating Agent with Custom Tools...")
     print("=" * 60)
     
     # 1. Create custom tool registry
@@ -295,33 +300,66 @@ def create_agent_with_custom_tools():
     custom_registry.register_tool(DatabaseTool, {"db_config": {"host": "localhost", "port": 5432}})
     custom_registry.register_tool(APIIntegrationTool, {"api_configs": {"service1": {"base_url": "https://api.example.com"}}})
     
-    # 3. Create agent configuration
+    # 3. Create agent configuration with v0.6.0 enhancements
     config = AgentConfig()
     
-    # Set up LLM (user needs to provide API key)
+    # Configure enhanced memory management
+    config.set_memory_enabled(True)
+    config.set_titans_memory(True)  # Enable Titans memory for better context
+    
+    # Set up LLM with multiple provider support
     groq_key = os.getenv('GROQ_API_KEY')
+    openai_key = os.getenv('OPENAI_API_KEY')
+    anthropic_key = os.getenv('ANTHROPIC_API_KEY')
+    
     if groq_key:
         config.set_api_key('groq', groq_key)
         config.set_llm_provider('groq')
-        config.set_llm_model('llama-3.1-70b-versatile')
+        config.set_llm_model('llama-3.1-8b-instant')  # Fast and efficient
+        print("[CONFIG] Using Groq LLM provider")
+    elif openai_key:
+        config.set_api_key('openai', openai_key)
+        config.set_llm_provider('openai')
+        config.set_llm_model('gpt-4o-mini')
+        print("[CONFIG] Using OpenAI LLM provider")
+    elif anthropic_key:
+        config.set_api_key('anthropic', anthropic_key)
+        config.set_llm_provider('anthropic')
+        config.set_llm_model('claude-3-haiku-20240307')
+        print("[CONFIG] Using Anthropic LLM provider")
     else:
-        print("Warning: GROQ_API_KEY not found. Some features may be limited.")
+        print("[WARNING] No LLM provider API key found. Please set GROQ_API_KEY, OPENAI_API_KEY, or ANTHROPIC_API_KEY")
     
     # 4. Create agent
     agent = SingleAgent(config=config)
     
-    # 5. Customize agent identity
+    # 5. Customize agent identity with v0.6.0 context
     agent.config.set_agent_name("CustomToolAgent")
-    agent.config.set_personality(
-        "You are CustomToolAgent, equipped with specialized tools for weather, database, and API operations. "
-        "Use your custom tools to provide comprehensive and accurate responses."
-    )
+    
+    enhanced_personality = """
+You are CustomToolAgent, a specialized AI assistant equipped with custom tools for weather, database, and API operations.
+
+You have access to Metis Agent v0.6.0's advanced capabilities including:
+- 36+ built-in tools for development, research, and analysis
+- Custom tools for weather data, database operations, and API integrations
+- Enhanced memory system with Titans-inspired context management
+- Secure execution environment with proper error handling
+- Multi-tool workflow orchestration capabilities
+
+Always leverage both your custom tools and built-in tools when appropriate to provide comprehensive, actionable assistance.
+Prioritize using your specialized custom tools for domain-specific tasks while utilizing the full Metis ecosystem for complex workflows.
+"""
+    
+    agent.config.set_personality(enhanced_personality)
     
     # 6. Integrate custom tools
     custom_registry.integrate_with_agent(agent)
     
-    print(f"\nAgent created: {agent.get_agent_identity()['name']}")
-    print(f"Custom tools available: {custom_registry.list_tools()}")
+    print(f"\n[OK] Agent created: {agent.get_agent_identity()['name']}")
+    print(f"[TOOLS] Custom tools available: {custom_registry.list_tools()}")
+    print(f"[TOOLS] Total built-in tools: 36+")
+    print(f"[MEMORY] Enhanced memory: {config.is_memory_enabled()}")
+    print(f"[MEMORY] Titans memory: {config.is_titans_memory_enabled()}")
     
     return agent, custom_registry
 
@@ -431,10 +469,18 @@ def advanced_custom_tool_example():
 def main():
     """Main execution function"""
     
-    print("Custom Tools Template - Metis Agent Framework")
+    # Load environment variables from .env.local file
+    env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env.local')
+    if os.path.exists(env_path):
+        load_dotenv(env_path)
+        print(f"[ENV] Loaded environment variables from {env_path}")
+    else:
+        print(f"[ENV] No .env.local file found at {env_path}")
+    
+    print("[METIS] Custom Tools Template - Agent Framework v0.6.0")
     print("=" * 60)
     print("This template demonstrates how to create and use custom tools")
-    print("with the Metis Agent framework for specialized functionality.")
+    print("with the Metis Agent framework v0.6.0 for specialized functionality.")
     print()
     
     try:
@@ -445,23 +491,30 @@ def main():
         advanced_custom_tool_example()
         
         print("\n" + "=" * 60)
-        print("Custom Tools Template completed successfully!")
+        print("[COMPLETE] Custom Tools Template completed successfully!")
         print("=" * 60)
-        print("\nKey Features Demonstrated:")
-        print("+ Custom tool creation following Metis standards")
-        print("+ Tool registration and integration with agents")
+        print("\n[INFO] Key Features Demonstrated:")
+        print("+ Custom tool creation following Metis v0.6.0 standards")
+        print("+ Tool registration and integration with 36+ built-in tools")
         print("+ Multiple tool types (Weather, Database, API)")
         print("+ Tool chaining and workflow execution")
-        print("+ Error handling and validation")
-        print("\nNext Steps:")
+        print("+ Enhanced memory management with Titans integration")
+        print("+ Multi-provider LLM support (Groq, OpenAI, Anthropic)")
+        print("+ Secure environment loading and error handling")
+        print("\n[INFO] Next Steps:")
         print("1. Customize tools for your specific use case")
-        print("2. Add your API keys and database configurations")
+        print("2. Add your API keys to .env.local file")
         print("3. Extend tools with additional functionality")
         print("4. Integrate with your existing systems")
+        print("5. Explore E2B Code Sandbox integration for secure execution")
         
     except Exception as e:
-        print(f"Error: {e}")
-        print("Please check your configuration and try again.")
+        print(f"[ERROR] Error: {e}")
+        print("[INFO] Please check your configuration and try again.")
+        print("\n[TROUBLESHOOTING] Common issues:")
+        print("1. Ensure API keys are set in .env.local file")
+        print("2. Check internet connectivity for API calls")
+        print("3. Verify metis-agent is up to date: pip install --upgrade metis-agent")
 
 
 if __name__ == "__main__":

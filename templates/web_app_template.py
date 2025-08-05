@@ -22,7 +22,6 @@ Features:
 from flask import Flask, render_template, render_template_string, request, jsonify, session
 from flask_cors import CORS
 from metis_agent import SingleAgent
-from metis_agent.core.agent_config import AgentConfig
 import os
 import uuid
 import json
@@ -31,6 +30,14 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env.local'))
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
+
+# Explicitly set Google API environment variables for tools
+google_api_key = os.getenv('GOOGLE_API_KEY')
+if google_api_key:
+    os.environ['GOOGLE_API_KEY'] = google_api_key
+    os.environ['GOOGLE_SEARCH_ENGINE_ID'] = os.getenv('GOOGLE_SEARCH_ENGINE_ID', '53433d9e4d284403e')
+    os.environ['GOOGLE_CSE_ID'] = os.getenv('GOOGLE_SEARCH_ENGINE_ID', '53433d9e4d284403e')
+    print(f"Google API setup: Key loaded, Engine ID: {os.environ['GOOGLE_SEARCH_ENGINE_ID']}")
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -83,12 +90,25 @@ def create_custom_agent():
     - Configure memory settings
     """
     
-    # Step 1: Create agent configuration
-    config = AgentConfig()
+    # Ensure all environment variables are properly set
+    api_keys = {
+        'GOOGLE_API_KEY': os.getenv('GOOGLE_API_KEY'),
+        'FIRECRAWL_API_KEY': os.getenv('FIRECRAWL_API_KEY'),
+        'OPENAI_API_KEY': os.getenv('OPENAI_API_KEY'),
+        'GROQ_API_KEY': os.getenv('GROQ_API_KEY'),
+        'GOOGLE_SEARCH_ENGINE_ID': os.getenv('GOOGLE_SEARCH_ENGINE_ID', '53433d9e4d284403e')
+    }
     
-    # Step 2: Configure features
-    config.set_memory_enabled(True)      # Enable conversation memory
-    config.set_titans_memory(True)       # Enable enhanced memory
+    for key, value in api_keys.items():
+        if value:
+            os.environ[key] = value
+            if key == 'GOOGLE_SEARCH_ENGINE_ID':
+                os.environ['GOOGLE_CSE_ID'] = value  # Alternative name
+    
+    print(f"Environment setup complete. Google API available: {bool(os.getenv('GOOGLE_API_KEY'))}")
+    
+    # Step 1: Create agent directly (AgentConfig not available in current version)
+    # The SingleAgent will use default configuration with memory enabled
     
     # Step 3: Define your agent's personality and capabilities
     # Customize this system message to create your unique agent!
@@ -118,10 +138,32 @@ You have access to various tools and can:
 
 Remember: You're powered by the Metis Agent framework, which gives you intelligent tool selection and adaptive memory capabilities."""
 
-    # Step 4: Create the agent first
-    agent = SingleAgent(config)
+    # Step 2: Create the agent with default configuration
+    agent = SingleAgent()
     
-    # Step 5: Set the custom personality
+    # Step 5: Configure GoogleSearchTool with parameter injection
+    google_api_key = os.getenv('GOOGLE_API_KEY')
+    google_engine_id = os.getenv('GOOGLE_SEARCH_ENGINE_ID', '53433d9e4d284403e')
+    
+    if google_api_key and 'GoogleSearchTool' in agent.tools:
+        google_tool = agent.tools['GoogleSearchTool']
+        
+        # Store original execute method
+        original_execute = google_tool.execute
+        
+        # Create wrapper function that always passes required parameters
+        def execute_with_params(query, **kwargs):
+            # Always inject the required parameters
+            kwargs['google_api_key'] = google_api_key
+            kwargs['cx'] = google_engine_id
+            print(f"GoogleSearch executing: {query[:50]}... with engine ID: {google_engine_id}")
+            return original_execute(query, **kwargs)
+        
+        # Replace the execute method with our wrapper
+        google_tool.execute = execute_with_params
+        print(f"GoogleSearchTool configured with API key and engine ID: {google_engine_id}")
+    
+    # Step 6: Set the custom personality
     agent.set_system_message(custom_personality)
     
     return agent
