@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](https://opensource.org/licenses/Apache-2.0)
 [![Downloads](https://pepy.tech/badge/metis-agent)](https://pepy.tech/project/metis-agent)
 
-A powerful, modular framework for building AI agents with intelligent memory management and minimal boilerplate code. Metis Agents provides a comprehensive toolkit for creating intelligent agents that can understand user queries, plan and execute complex tasks, and maintain persistent conversations.
+A powerful, modular framework for building AI agents with intelligent memory management and minimal boilerplate code. Metis Agent provides a comprehensive toolkit for creating intelligent agents that can understand user queries, plan and execute complex tasks, and maintain persistent conversations.
 
 **Latest Release: v0.6.0** - Major expansion with secure code execution, advanced tools, and enterprise-grade capabilities.
 
@@ -27,8 +27,10 @@ A powerful, modular framework for building AI agents with intelligent memory man
 - **Session Management**: Persistent conversations with automatic context preservation
 
 ###  **LLM Integration**
-- **Multiple Providers**: OpenAI, Groq, Anthropic, HuggingFace with seamless switching
-- **Model Flexibility**: Support for GPT-4, Claude, Llama, Mixtral, and custom models
+- **Multiple Providers**: OpenAI, Groq, Anthropic, HuggingFace (API & Local), Ollama with seamless switching
+- **Local Model Support**: Run HuggingFace models locally with transformers library (no API keys required)
+- **Model Flexibility**: Support for GPT-4, Claude, Llama, Mixtral, GPT-2, DialoGPT, and custom models
+- **Device Optimization**: Automatic device selection (CUDA, MPS, CPU) with quantization support
 - **Secure Authentication**: Encrypted API key management with environment fallback
 
 ###  **Advanced Tool Suite (36+ Tools)**
@@ -123,8 +125,14 @@ print(response)
 ```python
 from metis_agent import SingleAgent, configure_llm
 
-# Configure LLM (OpenAI, Groq, Anthropic, or HuggingFace)
+# Configure cloud-based LLM (OpenAI, Groq, Anthropic)
 configure_llm("groq", "llama-3.1-8b-instant", "your-api-key")
+
+# Configure local HuggingFace model (no API key required)
+configure_llm("huggingface", "gpt2")
+
+# Configure Ollama local model (no API key required)
+configure_llm("ollama", "tinydolphin")
 
 # Create an agent
 agent = SingleAgent()
@@ -218,56 +226,124 @@ Metis Agent provides a comprehensive command-line interface for all operations:
 # Interactive chat mode
 metis chat
 
-# Run a single query
-metis run "Write a Python function to calculate Fibonacci numbers"
+# Single query with chat
+metis chat "Write a Python function to calculate Fibonacci numbers"
 
-# Run with specific LLM provider
-metis run "Explain quantum computing" --llm groq --model llama-3.1-8b-instant
+# Code generation for specific tasks
+metis code "Write a Python function to calculate Fibonacci numbers"
 
-# Run with memory enabled
-metis run "What did we discuss earlier?" --memory --session-id user123
+# Chat with session context
+metis chat "What did we discuss earlier?" --session user123
 ```
 
-### Agent Management
+### Basic Usage
 
 ```bash
-# Create a new agent configuration
-metis agent create --name "CodeExpert" --personality "Expert programming assistant"
+# Interactive chat for debugging
+metis chat "Help me debug this code"
 
-# List all configured agents
-metis agent list
+# Code generation for specific tasks
+metis code "Create a debugging function for Python"
 
-# Use a specific agent
-metis run "Help me debug this code" --agent CodeExpert
-
-# Delete an agent
-metis agent delete CodeExpert
+# Interactive code session
+metis code --interactive
 ```
 
 ### API Key Management
 
 ```bash
 # Set API keys for different providers
-metis auth set-key openai sk-your-openai-key
-metis auth set-key groq gsk_your-groq-key
-metis auth set-key anthropic your-anthropic-key
-metis auth set-key e2b your-e2b-api-key
+metis auth set openai sk-your-openai-key
+metis auth set groq gsk_your-groq-key
+metis auth set anthropic your-anthropic-key
+metis auth set e2b your-e2b-api-key
 
 # List configured API keys (shows providers only, not keys)
-metis auth list-keys
+metis auth list
 
 # Remove an API key
-metis auth remove-key openai
+metis auth remove openai
 
 # Test API key connectivity
 metis auth test openai
 ```
 
+### Local Model Setup
+
+#### HuggingFace Local Models
+
+```bash
+# Install required dependencies
+pip install transformers torch
+
+# Configure for local HuggingFace models
+metis config set llm_provider huggingface
+metis config set llm_model gpt2
+
+# Configure device preference
+metis config hf-device auto    # auto-detect best device
+metis config hf-device cpu     # force CPU
+metis config hf-device cuda    # force CUDA (if available)
+metis config hf-device mps     # force MPS (macOS)
+
+# Configure quantization for memory efficiency
+metis config hf-quantization none   # no quantization
+metis config hf-quantization 8bit   # 8-bit quantization
+metis config hf-quantization 4bit   # 4-bit quantization
+
+# Set maximum sequence length
+metis config hf-max-length 512
+metis config hf-max-length 1024
+
+# View available model recommendations
+metis config list-models
+```
+
+#### Ollama Local Models
+
+```bash
+# Install Ollama from https://ollama.ai
+# Pull a model
+ollama pull tinydolphin
+
+# Configure Metis to use Ollama
+metis config set llm_provider ollama
+metis config set llm_model tinydolphin
+
+# Set custom Ollama server URL (if needed)
+metis config ollama-url http://localhost:11434
+
+# List available Ollama models
+metis config list-models
+```
+
+#### Local Model Advantages
+
+**Privacy & Security:**
+- No data sent to external APIs
+- Complete control over your conversations
+- Offline operation capability
+
+**Cost Efficiency:**
+- No API usage fees
+- One-time setup cost only
+- Unlimited usage
+
+**Customization:**
+- Fine-tune models for specific domains
+- Control generation parameters
+- Optimize for your hardware
+
+**Performance:**
+- No network latency
+- Consistent response times
+- Hardware-optimized inference
+
 ### E2B Code Sandbox Setup
 
 ```bash
 # Set E2B API key for secure code execution
-metis auth set-key e2b your-e2b-api-key
+metis auth set e2b your-e2b-api-key
 
 # Test E2B connectivity
 metis auth test e2b
@@ -276,130 +352,120 @@ metis auth test e2b
 metis chat "Execute this Python code: print('Hello from E2B sandbox!')"
 ```
 
-### Tool Management
+### Code Generation
 
 ```bash
-# List all available tools
-metis tools list
+# Generate code using natural language
+metis code "Write a hello world function in Python"
 
-# Get detailed information about a tool
-metis tools info CodeGenerationTool
+# Interactive code generation
+metis code --interactive
 
-# Test a specific tool
-metis tools test CodeGenerationTool "Write a hello world function"
-
-# Enable/disable tools
-metis tools enable GoogleSearchTool
-metis tools disable FirecrawlTool
+# Generate code with specific requirements
+metis code "Create a REST API with FastAPI and authentication"
 ```
 
-### Memory Operations
+### Interactive Chat
 
 ```bash
-# Show memory statistics
-metis memory stats
+# Start interactive chat session
+metis chat
 
-# Clear memory for a session
-metis memory clear --session-id user123
+# Single query with session context
+metis chat "What is machine learning?" --session user123
 
-# Export memory to file
-metis memory export --output memory_backup.json
-
-# Import memory from file
-metis memory import --input memory_backup.json
-
-# Search memory contents
-metis memory search "machine learning"
+# Ask follow-up questions in the same session
+metis chat "Can you explain neural networks?" --session user123
 ```
 
-### Web Server
+### Configuration Management
 
 ```bash
-# Start web server with default settings
-metis serve
-
-# Start with custom port and memory enabled
-metis serve --port 8080 --memory --cors
-
-# Start with specific agent
-metis serve --agent CodeExpert --port 5000
-
-# Start with authentication
-metis serve --auth --api-key your-server-api-key
-```
-
-### Configuration
-
-```bash
-# Configure default LLM provider
-metis config set-llm --provider groq --model llama-3.1-8b-instant
-
-# Set default memory settings
-metis config set-memory --type titans --path ./memory
-
-# View current configuration
+# Show current configuration
 metis config show
+
+# Set LLM provider
+metis config set llm_provider openai
+metis config set llm_provider groq
+metis config set llm_provider anthropic
+metis config set llm_provider huggingface  # for local models
+metis config set llm_provider ollama       # for Ollama models
+
+# Set specific model (optional)
+metis config set llm_model gpt-4o
+metis config set llm_model llama-3.1-8b-instant
+metis config set llm_model claude-3-opus-20240229
+metis config set llm_model gpt2                    # HuggingFace local
+metis config set llm_model microsoft/DialoGPT-small # HuggingFace local
+metis config set llm_model tinydolphin              # Ollama local
+
+# Configure memory settings
+metis config set memory_enabled true
+metis config set titans_memory true
+
+# Set session and context limits
+metis config set session_timeout 3600
+metis config set max_context_length 4000
 
 # Reset configuration to defaults
 metis config reset
+
+# Local model configuration
+# HuggingFace specific settings
+metis config hf-device auto|cpu|cuda|mps
+metis config hf-quantization none|8bit|4bit
+metis config hf-max-length 512
+
+# Ollama specific settings
+metis config ollama-url http://localhost:11434
+
+# List available models for current provider
+metis config list-models
 ```
 
-### Project Management
+### Agent Identity Management
 
 ```bash
-# Initialize a new Metis Agent project
-metis project init my-agent-project
+# Show agent identity
+metis config identity
 
-# Generate project scaffolding
-metis project scaffold --template basic
+# Set agent name
+metis config set-name "MyAgent"
 
-# Validate project structure
-metis project validate
+# Set agent personality (interactive - type 'END' when finished)
+metis config set-personality --interactive
 
-# Build and package project
-metis project build
+# Set agent personality from file
+metis config set-personality --file personality.txt
+
+# Set system message (base or custom layer - type 'END' when finished)
+metis config system-message --interactive --layer custom
+metis config system-message --file system.txt --layer base
+
+# Regenerate agent identity
+metis config regenerate-identity
 ```
 
-### Development Tools
 
-```bash
-# Run system diagnostics
-metis dev diagnose
 
-# Test all components
-metis dev test
 
-# Generate development templates
-metis dev template --type custom-tool --name MyTool
 
-# Profile agent performance
-metis dev profile "Complex query for performance testing"
+## Python API Usage
+
+Metis Agent can be used directly in Python applications:
+
+```python
+from metis_agent import SingleAgent
+
+# Initialize agent
+agent = SingleAgent()
+
+# Process a query
+response = agent.process_query("Write a Python function to calculate Fibonacci numbers")
+print(response)
 ```
 
-## Web Server
-
-Metis Agent includes a web server for API access:
-
-```bash
-# Start the web server
-metis serve
-```
-
-Then make requests to the API:
-
-```bash
-curl -X POST http://localhost:5000/api/query \
-  -H "Content-Type: application/json" \
-  -d '{"query": "Write a Python function to calculate Fibonacci numbers"}'
-```
-
-API Endpoints:
-
-- `GET /` - Server status
-- `POST /api/query` - Process a query
-- `GET /api/agent-identity` - Get agent information
-- `GET /api/memory-insights` - Get memory statistics
-- `GET /api/tools` - List available tools
+For web applications, you can integrate the agent into your existing Flask/FastAPI server.
 
 ## Detailed Documentation
 
@@ -477,16 +543,45 @@ Configure and use different LLM providers:
 ```python
 from metis_agent.core.llm_interface import configure_llm, get_llm
 
-# Configure LLM
+# Configure cloud-based LLMs
 configure_llm("openai", "gpt-4o")  # OpenAI
 configure_llm("groq", "llama-3.1-8b-instant")  # Groq
 configure_llm("anthropic", "claude-3-opus-20240229")  # Anthropic
-configure_llm("huggingface", "mistralai/Mixtral-8x7B-Instruct-v0.1")  # HuggingFace
+
+# Configure local HuggingFace models (no API key required)
+configure_llm("huggingface", "gpt2")  # Small model
+configure_llm("huggingface", "microsoft/DialoGPT-small")  # Chat model
+configure_llm("huggingface", "TinyLlama/TinyLlama-1.1B-Chat-v1.0")  # Larger model
+
+# Configure Ollama local models (no API key required)
+configure_llm("ollama", "tinydolphin")  # Ollama model
 
 # Get configured LLM
 llm = get_llm()
 response = llm.chat([{"role": "user", "content": "Hello!"}])
 ```
+
+#### Popular Local Models
+
+**HuggingFace Models (Small - < 1GB):**
+- `gpt2` - OpenAI's GPT-2 base model
+- `distilgpt2` - Distilled version of GPT-2
+- `microsoft/DialoGPT-small` - Conversational model
+
+**HuggingFace Models (Medium - 1-5GB):**
+- `microsoft/DialoGPT-medium` - Better conversational model
+- `TinyLlama/TinyLlama-1.1B-Chat-v1.0` - Efficient chat model
+- `QuixiAI/TinyDolphin-2.8-1.1b` - Instruction-tuned model
+
+**HuggingFace Models (Large - 5GB+):**
+- `microsoft/DialoGPT-large` - High-quality conversations
+- `EleutherAI/gpt-neo-2.7B` - Large generative model
+
+**Ollama Models:**
+- `tinydolphin` - Small, efficient model (default)
+- `llama2` - Meta's Llama 2 model
+- `codellama` - Code-specialized model
+- `mistral` - Mistral 7B model
 
 ### Tools
 
