@@ -1,11 +1,11 @@
-# Metis Agent
+# Metis Agents
 
 [![PyPI version](https://badge.fury.io/py/metis-agent.svg)](https://badge.fury.io/py/metis-agent)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](https://opensource.org/licenses/Apache-2.0)
 [![Downloads](https://pepy.tech/badge/metis-agent)](https://pepy.tech/project/metis-agent)
 
-A powerful, modular framework for building AI agents with intelligent memory management and minimal boilerplate code. Metis Agent provides a comprehensive toolkit for creating intelligent agents that can understand user queries, plan and execute complex tasks, and maintain persistent conversations.
+A powerful, modular framework for building AI agents with intelligent memory management and minimal boilerplate code. Metis Agents provides a comprehensive toolkit for creating intelligent agents that can understand user queries, plan and execute complex tasks, and maintain persistent conversations.
 
 **Latest Release: v0.6.0** - Major expansion with secure code execution, advanced tools, and enterprise-grade capabilities.
 
