@@ -1,757 +1,533 @@
-# Metis Agents
+# Metis Agent Framework
 
 [![PyPI version](https://badge.fury.io/py/metis-agent.svg)](https://badge.fury.io/py/metis-agent)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](https://opensource.org/licenses/Apache-2.0)
 [![Downloads](https://pepy.tech/badge/metis-agent)](https://pepy.tech/project/metis-agent)
 
-A powerful, modular framework for building AI agents with intelligent memory management and minimal boilerplate code. Metis Agent provides a comprehensive toolkit for creating intelligent agents that can understand user queries, plan and execute complex tasks, and maintain persistent conversations.
+A comprehensive, enterprise-grade framework for building intelligent AI agents with advanced security, memory management, and a rich ecosystem of tools.
 
-**Latest Release: v0.6.0** - Major expansion with secure code execution, advanced tools, and enterprise-grade capabilities.
+**Latest Release: v0.14.0** - Security-hardened enterprise framework with 36+ tools and military-grade encryption.
 
-### What's New in v0.6.0
-- ** E2B Code Sandbox** - Secure Python code execution in isolated cloud environments
-- ** 36+ Advanced Tools** - Comprehensive toolkit for development, research, and analysis
-- ** Smart Orchestrator** - Intelligent tool selection with parameter extraction
-- ** Enhanced Analytics** - Advanced memory management with Titans-inspired system
-- ** Enterprise Ready** - MCP integration, blueprint system, and production APIs
-- ** Performance Optimized** - Improved query analysis and execution strategies
-- ** Developer Focused** - Git integration, project management, and automated workflows
+## What's New in v0.14.0
 
-## Features
+### Enterprise Security (v0.13.0-0.14.0)
+- **Military-Grade Encryption**: AES-256-GCM with PBKDF2 key derivation
+- **Command Injection Prevention**: Whitelist-only command execution with comprehensive sanitization
+- **Path Traversal Protection**: Advanced directory traversal attack prevention
+- **Input Validation Framework**: Multi-layer protection against SQL injection, XSS, and template injection
+- **OWASP Compliance**: Enterprise-ready security with comprehensive audit logging
 
-###  **Core Architecture**
-- **Smart Orchestrator**: Intelligent tool selection with parameter extraction and execution strategies
-- **Enhanced Memory System**: Titans-inspired adaptive memory with token-aware context management
-- **Query Analyzer**: LLM-powered complexity analysis for optimal tool routing
-- **Session Management**: Persistent conversations with automatic context preservation
+### Advanced AI Capabilities
+- **Smart Orchestrator**: LLM-powered intelligent tool selection and execution strategies
+- **Titans Memory System**: Adaptive memory with surprise detection and token awareness
+- **Multi-LLM Support**: OpenAI, Anthropic, Groq, HuggingFace, and Ollama integration
+- **Blueprint Automation**: Workflow definition and execution system
+- **Query Analysis**: Complexity-based routing with performance optimization
 
-###  **LLM Integration**
-- **Multiple Providers**: OpenAI, Groq, Anthropic, HuggingFace (API & Local), Ollama with seamless switching
-- **Local Model Support**: Run HuggingFace models locally with transformers library (no API keys required)
-- **Model Flexibility**: Support for GPT-4, Claude, Llama, Mixtral, GPT-2, DialoGPT, and custom models
-- **Device Optimization**: Automatic device selection (CUDA, MPS, CPU) with quantization support
-- **Secure Authentication**: Encrypted API key management with environment fallback
-
-###  **Advanced Tool Suite (36+ Tools)**
-
-#### ** Security & Execution**
-- **E2B Code Sandbox**: Secure Python execution in isolated cloud environments
-- **Bash Tool**: Safe system command execution with output capture
-
-#### ** Development Tools**
-- **Git Integration**: Complete workflow management (clone, commit, push, merge, etc.)
-- **Code Generation**: Multi-language code creation with best practices
-- **Unit Test Generator**: Automated test creation with comprehensive coverage
-- **Dependency Analyzer**: Project dependency analysis and optimization
-- **Project Management**: Full lifecycle management with validation
-
-#### ** Research & Analysis**
-- **Deep Research**: Multi-source research with citation management
-- **Data Analysis**: Advanced analytics with pandas, numpy, visualization
-- **Web Scraper**: Intelligent content extraction with Firecrawl integration
-- **Google Search**: Real-time web search with result processing
-
-#### ** Content & Communication**
-- **Content Generation**: Multi-format content creation (blogs, docs, emails)
-- **Text Analyzer**: Advanced NLP analysis with sentiment and entity recognition
-- **Blueprint Execution**: Automated workflow and process execution
-
-#### ** File & System Operations**
-- **File Manager**: Complete file system operations with safety checks
-- **Read/Write Tools**: Intelligent file handling with format detection
-- **Grep Tool**: Advanced search with regex and pattern matching
-
-###  **Enterprise Features**
-- **MCP Integration**: Model Context Protocol server support
-- **Blueprint System**: Workflow automation and process management
-- **CLI Interface**: Comprehensive command-line tools for all operations
-- **Web API**: RESTful endpoints for integration and automation
-- **Memory Analytics**: Real-time performance monitoring and insights
-- **Tool Registry**: Dynamic tool discovery and registration system
+### Comprehensive Tool Ecosystem (36+ Tools)
+- **E2B Code Sandbox**: Secure cloud code execution environment
+- **Development Tools**: Git integration, project management, unit test generation
+- **Research & Analysis**: Deep research, web scraping, data analysis
+- **Content Generation**: Multi-format content creation and processing
+- **Security Tools**: Vulnerability assessment and secure operations
 
 ## Installation
 
+### Quick Install
 ```bash
 pip install metis-agent
 ```
 
-## Starter Templates
-
-Get started quickly with our comprehensive collection of templates and examples:
-
-**[Metis Agent Starter Templates](https://github.com/metis-analytics/metis-starter)** - A complete collection of templates for different use cases:
-
-- **Basic Agent Template** - Simple agent for beginners and quick prototypes
-- **Custom Agent Template** - Specialized agents with custom personalities
-- **Web App Template** - Flask-based web chat interface
-- **Advanced Integration Template** - Enterprise multi-agent systems
-- **Custom Tools Template** - Examples for extending agent capabilities
-- **Simple Custom Tool Example** - Step-by-step tool development guide
-
+### Development Install
 ```bash
-# Clone the starter templates
-git clone https://github.com/metis-analytics/metis-starter.git
-cd metis-starter
-
-# Run your first agent
-python templates/basic_agent_template.py
+pip install metis-agent[dev,security]
 ```
 
-Each template includes:
-- Complete working examples
-- Detailed documentation
-- Setup instructions
-- Customization guides
-- Best practices
+### All Features
+```bash
+pip install metis-agent[dev,security,local-models,docs]
+```
 
 ## Quick Start
 
-### Basic Usage
+### 1. Set Up API Keys
+Create a `.env` file or set environment variables:
+```bash
+# Choose your preferred LLM provider
+GROQ_API_KEY=your_groq_key_here          # Recommended: Fast and free
+OPENAI_API_KEY=your_openai_key_here      # GPT models  
+ANTHROPIC_API_KEY=your_anthropic_key_here # Claude models
 
+# Optional: Additional tool APIs
+GOOGLE_API_KEY=your_google_key_here      # For search functionality
+E2B_API_KEY=your_e2b_key_here           # For code sandbox
+FIRECRAWL_API_KEY=your_firecrawl_key_here # For web scraping
+```
+
+Get your free API keys:
+- **Groq**: https://console.groq.com/keys (Fastest, free tier)
+- **OpenAI**: https://platform.openai.com/api-keys  
+- **Anthropic**: https://console.anthropic.com/
+
+### 2. Basic Usage
 ```python
 from metis_agent import SingleAgent
 
-# Create an agent
+# Create and use agent in seconds
 agent = SingleAgent()
 
-# Process a query
-response = agent.process_query("Write a Python function to calculate Fibonacci numbers")
+response = agent.process_query("Hello! What can you help me with?") 
 print(response)
 ```
 
-### Using Different LLM Providers
+### 3. Agent Configuration & Customization
+```python
+from metis_agent import SingleAgent
+from metis_agent.core.agent_config import AgentConfig
+from metis_agent.memory.enhanced_memory_manager import MemoryConfig
+
+# Create custom agent configuration
+config = AgentConfig()
+config.set_agent_name("CodeExpert")  # Custom agent name
+config.set_llm_provider("groq")      # Choose LLM provider
+config.set_llm_model("llama-3.1-8b-instant")
+
+# Configure memory settings
+memory_config = MemoryConfig(
+    max_context_tokens=4000,
+    max_interactions_per_session=50,
+    enable_cost_tracking=True
+)
+
+# Create specialized agent
+agent = SingleAgent(
+    config=config,
+    memory_config=memory_config,
+    use_titans_memory=True,
+    enhanced_processing=True
+)
+
+# Your agent now has custom identity and advanced memory
+response = agent.process_query("What's your name and what can you do?")
+print(f"Agent: {response}")
+```
+
+## Core Features
+
+### Intelligent Agent Architecture
+- **Query Analysis**: LLM-powered complexity assessment and optimal routing
+- **Smart Orchestration**: Multi-strategy execution (single, sequential, parallel)
+- **Memory Management**: Token-aware context with intelligent summarization
+- **Session Persistence**: Maintain conversations across interactions
+
+### Comprehensive Tool Suite
+
+#### Security & Execution
+- **E2B Code Sandbox**: Secure Python execution in isolated cloud environments
+- **Bash Tool**: Safe system command execution with comprehensive sanitization
+- **Input Validation**: Multi-layer protection against injection attacks
+
+#### Development Tools
+- **Git Integration**: Complete workflow management (clone, commit, push, merge)
+- **Code Generation**: Multi-language code creation with best practices
+- **Unit Test Generator**: Automated test creation with comprehensive coverage
+- **Project Management**: Full lifecycle management with validation
+- **Dependency Analyzer**: Project dependency analysis and optimization
+
+#### Research & Analysis
+- **Deep Research**: Multi-source research with citation management
+- **Web Scraping**: Advanced content extraction with Firecrawl integration
+- **Data Analysis**: Statistical analysis and visualization capabilities
+- **Text Analysis**: Sentiment analysis, readability assessment, keyword extraction
+
+#### Content Generation
+- **Content Creation**: Multi-format content generation (articles, documentation, reports)
+- **Template Processing**: Dynamic template rendering and customization
+- **Documentation**: Automatic documentation generation from code
+
+### Advanced Memory System
+
+#### Titans-Inspired Memory
+```python
+from metis_agent.memory.titans import TitansMemoryAdapter
+
+# Enable Titans memory for adaptive learning
+agent = SingleAgent(
+    use_titans_memory=True,
+    memory_config={
+        "surprise_threshold": 0.7,
+        "short_term_capacity": 15,
+        "long_term_capacity": 1000
+    }
+)
+```
+
+#### Enhanced Memory Manager
+```python
+from metis_agent.memory import EnhancedMemoryManager, MemoryConfig
+
+# Configure memory with token awareness
+memory_config = MemoryConfig(
+    max_context_tokens=4000,
+    max_interactions_per_session=20,
+    enable_summarization=True
+)
+
+agent = SingleAgent(memory_config=memory_config)
+```
+
+### Multi-LLM Support
 
 ```python
-from metis_agent import SingleAgent, configure_llm
+# OpenAI GPT models
+config.set_llm_provider('openai')
+config.set_llm_model('gpt-4o-mini')
 
-# Configure cloud-based LLM (OpenAI, Groq, Anthropic)
-configure_llm("groq", "llama-3.1-8b-instant", "your-api-key")
+# Anthropic Claude models  
+config.set_llm_provider('anthropic')
+config.set_llm_model('claude-3-haiku-20240307')
 
-# Configure local HuggingFace model (no API key required)
-configure_llm("huggingface", "gpt2")
+# Groq (fastest, free tier available)
+config.set_llm_provider('groq')
+config.set_llm_model('llama-3.1-8b-instant')
 
-# Configure Ollama local model (no API key required)
-configure_llm("ollama", "tinydolphin")
+# Local HuggingFace models
+config.set_llm_provider('huggingface_local')
+config.set_llm_model('microsoft/DialoGPT-medium')
 
-# Create an agent
+# Ollama local models
+config.set_llm_provider('ollama')
+config.set_llm_model('llama3.1:8b')
+```
+
+## Examples & Tutorials
+
+Check out our comprehensive examples in the `examples/` directory:
+
+### Example Files
+- **`01_quick_start.py`** - Get started in seconds with a working agent
+- **`02_advanced_configuration.py`** - Full agent customization with names, memory, and LLM settings  
+- **`03_custom_tools.py`** - Create custom tools and specialized agents
+
+### CLI Interface
+Metis Agent also includes a powerful command-line interface:
+
+```bash
+# Install and access CLI
+pip install metis-agent
+metis --help
+
+# Interactive chat
+metis chat
+
+# Process single queries
+metis run "Your query here"
+
+# Agent management
+metis agent create "MyAgent"
+metis agent list
+```
+
+See `CLI_REFERENCE.md` for complete command documentation.
+
+### Running the Examples
+
+```bash
+# Clone or download the examples
+cd metis_agent_public/examples
+
+# Quick start - minimal setup
+python 01_quick_start.py
+
+# Advanced configuration - custom agent setup  
+python 02_advanced_configuration.py
+
+# Custom tools - build specialized agents
+python 03_custom_tools.py
+```
+
+### Basic Agent Creation
+```python
+from metis_agent import SingleAgent
+
+# Create and use agent
 agent = SingleAgent()
-
-# Process a query
 response = agent.process_query("Explain quantum computing in simple terms")
 print(response)
 ```
 
-### Secure Code Execution with E2B
-
+### Custom Agent Configuration
 ```python
 from metis_agent import SingleAgent
+from metis_agent.core.agent_config import AgentConfig
+from metis_agent.memory.enhanced_memory_manager import MemoryConfig
 
-# Create an agent (E2B tool auto-detected)
-agent = SingleAgent()
+# Create specialized agent
+config = AgentConfig()
+config.set_agent_name("DataAnalyst")
+config.set_llm_provider("groq")
+config.set_personality("You are a data analysis expert specializing in Python and statistics.")
 
-# Execute Python code securely in cloud sandbox
-response = agent.process_query("""
-Execute this Python code:
-```python
-import pandas as pd
-import matplotlib.pyplot as plt
+memory_config = MemoryConfig(
+    max_context_tokens=4000,
+    max_interactions_per_session=50
+)
 
-# Create sample data
-data = {'x': [1, 2, 3, 4, 5], 'y': [2, 4, 6, 8, 10]}
-df = pd.DataFrame(data)
+agent = SingleAgent(
+    config=config,
+    memory_config=memory_config,
+    enhanced_processing=True
+)
 
-# Create visualization
-plt.figure(figsize=(8, 6))
-plt.plot(df['x'], df['y'], marker='o')
-plt.title('Sample Data Visualization')
-plt.xlabel('X values')
-plt.ylabel('Y values')
-plt.show()
-
-print(f"Data shape: {df.shape}")
-print(df.describe())
-```
-""")
-
+# Agent now has custom identity and advanced memory
+response = agent.process_query("What's your name and expertise?")
 print(response)
 ```
 
-### Creating Custom Tools
-
+### Custom Tool Development
 ```python
-from metis_agent import SingleAgent, BaseTool, register_tool
+from metis_agent import BaseTool, SingleAgent
+from metis_agent.tools.registry import register_tool
 
-class MyCustomTool(BaseTool):
-    name = "custom_tool"
-    description = "A custom tool for specialized tasks"
+class CalculatorTool(BaseTool):
+    """Custom calculator tool"""
     
-    def can_handle(self, task):
-        return "custom task" in task.lower()
-        
-    def execute(self, task):
-        return f"Executed custom tool on: {task}"
+    def get_description(self) -> str:
+        return "Perform mathematical calculations"
+    
+    def get_parameters(self) -> dict:
+        return {
+            "expression": {"type": "string", "required": True, "description": "Math expression"}
+        }
+    
+    def can_handle(self, query: str) -> bool:
+        math_keywords = ['calculate', 'compute', 'math', 'add', 'multiply']
+        return any(keyword in query.lower() for keyword in math_keywords)
+    
+    def execute(self, **kwargs) -> dict:
+        expression = kwargs.get('expression', '')
+        try:
+            result = eval(expression)  # Use safely in production
+            return {
+                "success": True,
+                "data": {"result": result, "expression": expression},
+                "message": f"Calculation: {expression} = {result}"
+            }
+        except Exception as e:
+            return {"success": False, "error": str(e)}
 
-# Register the tool
-register_tool("custom_tool", MyCustomTool)
-
-# Create an agent
+# Register and use custom tool
+register_tool("calculator", CalculatorTool)
 agent = SingleAgent()
-
-# Process a query
-response = agent.process_query("Perform a custom task")
+response = agent.process_query("Calculate 15 * 7 + 23")
 print(response)
 ```
 
-### Using Titans Memory
-
-```python
-from metis_agent import SingleAgent
-
-# Create an agent with Titans memory
-agent = SingleAgent(use_titans_memory=True)
-
-# Process queries with memory
-result1 = agent.process_query("What is machine learning?", session_id="user123")
-result2 = agent.process_query("How does it relate to AI?", session_id="user123")
-```
-
-## Command Line Interface
-
-Metis Agent provides a comprehensive command-line interface for all operations:
-
-### Core Commands
-
-```bash
-# Interactive chat mode
-metis chat
-
-# Single query with chat
-metis chat "Write a Python function to calculate Fibonacci numbers"
-
-# Code generation for specific tasks
-metis code "Write a Python function to calculate Fibonacci numbers"
-
-# Chat with session context
-metis chat "What did we discuss earlier?" --session user123
-```
-
-### Basic Usage
-
-```bash
-# Interactive chat for debugging
-metis chat "Help me debug this code"
-
-# Code generation for specific tasks
-metis code "Create a debugging function for Python"
-
-# Interactive code session
-metis code --interactive
-```
-
-### API Key Management
-
-```bash
-# Set API keys for different providers
-metis auth set openai sk-your-openai-key
-metis auth set groq gsk_your-groq-key
-metis auth set anthropic your-anthropic-key
-metis auth set e2b your-e2b-api-key
-
-# List configured API keys (shows providers only, not keys)
-metis auth list
-
-# Remove an API key
-metis auth remove openai
-
-# Test API key connectivity
-metis auth test openai
-```
-
-### Local Model Setup
-
-#### HuggingFace Local Models
-
-```bash
-# Install required dependencies
-pip install transformers torch
-
-# Configure for local HuggingFace models
-metis config set llm_provider huggingface
-metis config set llm_model gpt2
-
-# Configure device preference
-metis config hf-device auto    # auto-detect best device
-metis config hf-device cpu     # force CPU
-metis config hf-device cuda    # force CUDA (if available)
-metis config hf-device mps     # force MPS (macOS)
-
-# Configure quantization for memory efficiency
-metis config hf-quantization none   # no quantization
-metis config hf-quantization 8bit   # 8-bit quantization
-metis config hf-quantization 4bit   # 4-bit quantization
-
-# Set maximum sequence length
-metis config hf-max-length 512
-metis config hf-max-length 1024
-
-# View available model recommendations
-metis config list-models
-```
-
-#### Ollama Local Models
-
-```bash
-# Install Ollama from https://ollama.ai
-# Pull a model
-ollama pull tinydolphin
-
-# Configure Metis to use Ollama
-metis config set llm_provider ollama
-metis config set llm_model tinydolphin
-
-# Set custom Ollama server URL (if needed)
-metis config ollama-url http://localhost:11434
-
-# List available Ollama models
-metis config list-models
-```
-
-#### Local Model Advantages
-
-**Privacy & Security:**
-- No data sent to external APIs
-- Complete control over your conversations
-- Offline operation capability
-
-**Cost Efficiency:**
-- No API usage fees
-- One-time setup cost only
-- Unlimited usage
-
-**Customization:**
-- Fine-tune models for specific domains
-- Control generation parameters
-- Optimize for your hardware
-
-**Performance:**
-- No network latency
-- Consistent response times
-- Hardware-optimized inference
-
-### E2B Code Sandbox Setup
-
-```bash
-# Set E2B API key for secure code execution
-metis auth set e2b your-e2b-api-key
-
-# Test E2B connectivity
-metis auth test e2b
-
-# Execute code in sandbox via CLI
-metis chat "Execute this Python code: print('Hello from E2B sandbox!')"
-```
-
-### Code Generation
-
-```bash
-# Generate code using natural language
-metis code "Write a hello world function in Python"
-
-# Interactive code generation
-metis code --interactive
-
-# Generate code with specific requirements
-metis code "Create a REST API with FastAPI and authentication"
-```
-
-### Interactive Chat
-
-```bash
-# Start interactive chat session
-metis chat
-
-# Single query with session context
-metis chat "What is machine learning?" --session user123
-
-# Ask follow-up questions in the same session
-metis chat "Can you explain neural networks?" --session user123
-```
-
-### Configuration Management
-
-```bash
-# Show current configuration
-metis config show
-
-# Set LLM provider
-metis config set llm_provider openai
-metis config set llm_provider groq
-metis config set llm_provider anthropic
-metis config set llm_provider huggingface  # for local models
-metis config set llm_provider ollama       # for Ollama models
-
-# Set specific model (optional)
-metis config set llm_model gpt-4o
-metis config set llm_model llama-3.1-8b-instant
-metis config set llm_model claude-3-opus-20240229
-metis config set llm_model gpt2                    # HuggingFace local
-metis config set llm_model microsoft/DialoGPT-small # HuggingFace local
-metis config set llm_model tinydolphin              # Ollama local
-
-# Configure memory settings
-metis config set memory_enabled true
-metis config set titans_memory true
-
-# Set session and context limits
-metis config set session_timeout 3600
-metis config set max_context_length 4000
-
-# Reset configuration to defaults
-metis config reset
-
-# Local model configuration
-# HuggingFace specific settings
-metis config hf-device auto|cpu|cuda|mps
-metis config hf-quantization none|8bit|4bit
-metis config hf-max-length 512
-
-# Ollama specific settings
-metis config ollama-url http://localhost:11434
-
-# List available models for current provider
-metis config list-models
-```
-
-### Agent Identity Management
-
-```bash
-# Show agent identity
-metis config identity
-
-# Set agent name
-metis config set-name "MyAgent"
-
-# Set agent personality (interactive - type 'END' when finished)
-metis config set-personality --interactive
-
-# Set agent personality from file
-metis config set-personality --file personality.txt
-
-# Set system message (base or custom layer - type 'END' when finished)
-metis config system-message --interactive --layer custom
-metis config system-message --file system.txt --layer base
-
-# Regenerate agent identity
-metis config regenerate-identity
-```
-
-
-
-
-
-## Python API Usage
-
-Metis Agent can be used directly in Python applications:
-
-```python
-from metis_agent import SingleAgent
-
-# Initialize agent
-agent = SingleAgent()
-
-# Process a query
-response = agent.process_query("Write a Python function to calculate Fibonacci numbers")
-print(response)
-```
-
-For web applications, you can integrate the agent into your existing Flask/FastAPI server.
-
-## Detailed Documentation
+## Architecture Overview
 
 ### Core Components
 
-#### SingleAgent
-
-The main agent class that orchestrates all components:
-
-```python
-from metis_agent import SingleAgent
-
-agent = SingleAgent(
-    use_titans_memory=False,  # Enable/disable Titans memory
-    tools=None,               # Custom tools (uses all available if None)
-    llm_provider="openai",    # LLM provider
-    llm_model=None,           # LLM model (uses default if None)
-    memory_path=None,         # Path to memory database
-    task_file=None            # Path to task file
-)
+```
+metis_agent/
+├── core/                    # Core agent functionality
+│   ├── agent.py            # SingleAgent main class
+│   ├── smart_orchestrator.py # Intelligent tool coordination
+│   ├── advanced_analyzer.py  # Query complexity analysis
+│   └── response_synthesizer.py # Response generation
+├── tools/                   # Tool ecosystem
+│   ├── base.py             # BaseTool interface
+│   ├── registry.py         # Tool discovery and loading
+│   ├── core_tools/         # Essential tools
+│   ├── advanced_tools/     # Specialized tools
+│   └── utility_tools/      # Helper utilities
+├── memory/                  # Memory management
+│   ├── enhanced_memory_manager.py # Token-aware memory
+│   ├── titans/             # Adaptive memory system
+│   └── sqlite_store.py     # Persistent storage
+├── llm/                    # Multi-LLM support
+│   ├── factory.py          # Provider factory
+│   └── [provider]_llm.py   # Provider implementations
+├── cli/                    # Command-line interface
+├── auth/                   # Secure credential management
+└── utils/                  # Security and validation utilities
 ```
 
-#### Intent Router
+## Security Features
 
-Determines whether a user query is a question or a task:
+### Enterprise-Grade Protection
+- **AES-256-GCM Encryption**: Military-grade API key storage
+- **PBKDF2 Key Derivation**: 100,000+ iterations for key security
+- **Command Injection Prevention**: Whitelist-only execution with comprehensive sanitization
+- **Path Traversal Protection**: Advanced directory traversal attack prevention
+- **Input Validation**: Multi-layer protection against injection attacks
 
+### Security Configuration
 ```python
-from metis_agent.core.intent_router import IntentRouter
+from metis_agent.utils.input_validator import validate_input
+from metis_agent.utils.path_security import SecurePathValidator
 
-router = IntentRouter()
-intent = router.classify("What is the capital of France?")  # Returns "question"
-intent = router.classify("Create a Python script to sort a list")  # Returns "task"
-```
+# Input validation
+try:
+    safe_input = validate_input(user_input, "string", max_length=1000, context="general")
+except ValidationError as e:
+    print(f"Invalid input: {e}")
 
-#### Task Manager
-
-Manages tasks and their status:
-
-```python
-from metis_agent.core.task_manager import TaskManager
-
-task_manager = TaskManager()
-task_manager.add_task("Write a function to calculate Fibonacci numbers")
-task_manager.mark_complete("Write a function to calculate Fibonacci numbers")
-tasks = task_manager.get_all_tasks()
-```
-
-#### Memory Systems
-
-SQLite-based memory:
-
-```python
-from metis_agent.memory.sqlite_store import SQLiteMemory
-
-memory = SQLiteMemory("memory.db")
-memory.store_input("user123", "What is machine learning?")
-memory.store_output("user123", "Machine learning is...")
-context = memory.get_context("user123")
-```
-
-Titans-inspired adaptive memory:
-
-```python
-from metis_agent.memory.titans.titans_memory import TitansInspiredMemory
-
-memory = TitansInspiredMemory("memory_dir")
-memory.store_memory("Machine learning is...", "ai_concepts")
-relevant_memories = memory.retrieve_relevant_memories("What is deep learning?")
-```
-
-### LLM Providers
-
-Configure and use different LLM providers:
-
-```python
-from metis_agent.core.llm_interface import configure_llm, get_llm
-
-# Configure cloud-based LLMs
-configure_llm("openai", "gpt-4o")  # OpenAI
-configure_llm("groq", "llama-3.1-8b-instant")  # Groq
-configure_llm("anthropic", "claude-3-opus-20240229")  # Anthropic
-
-# Configure local HuggingFace models (no API key required)
-configure_llm("huggingface", "gpt2")  # Small model
-configure_llm("huggingface", "microsoft/DialoGPT-small")  # Chat model
-configure_llm("huggingface", "TinyLlama/TinyLlama-1.1B-Chat-v1.0")  # Larger model
-
-# Configure Ollama local models (no API key required)
-configure_llm("ollama", "tinydolphin")  # Ollama model
-
-# Get configured LLM
-llm = get_llm()
-response = llm.chat([{"role": "user", "content": "Hello!"}])
-```
-
-#### Popular Local Models
-
-**HuggingFace Models (Small - < 1GB):**
-- `gpt2` - OpenAI's GPT-2 base model
-- `distilgpt2` - Distilled version of GPT-2
-- `microsoft/DialoGPT-small` - Conversational model
-
-**HuggingFace Models (Medium - 1-5GB):**
-- `microsoft/DialoGPT-medium` - Better conversational model
-- `TinyLlama/TinyLlama-1.1B-Chat-v1.0` - Efficient chat model
-- `QuixiAI/TinyDolphin-2.8-1.1b` - Instruction-tuned model
-
-**HuggingFace Models (Large - 5GB+):**
-- `microsoft/DialoGPT-large` - High-quality conversations
-- `EleutherAI/gpt-neo-2.7B` - Large generative model
-
-**Ollama Models:**
-- `tinydolphin` - Small, efficient model (default)
-- `llama2` - Meta's Llama 2 model
-- `codellama` - Code-specialized model
-- `mistral` - Mistral 7B model
-
-### Tools
-
-Available tools (36+ advanced tools):
-
-#### **Security & Execution**
-- `E2BCodeSandboxTool`: Secure Python code execution in isolated cloud environments
-- `BashTool`: Safe system command execution with output capture
-
-#### **Development & Code**
-- `GitIntegrationTool`: Complete Git workflow management
-- `CodeGenerationTool`: Multi-language code generation with best practices
-- `PythonCodeTool`: Python-specific code analysis and execution
-- `UnitTestGeneratorTool`: Automated test creation with comprehensive coverage
-- `DependencyAnalyzerTool`: Project dependency analysis and optimization
-- `EditTool`: Intelligent code editing with context awareness
-
-#### **Research & Analysis**
-- `DeepResearchTool`: Multi-source research with citation management
-- `DataAnalysisTool`: Advanced analytics with pandas, numpy, visualization
-- `GoogleSearchTool`: Real-time web search with result processing
-- `WebScraperTool`: Intelligent content extraction
-- `FirecrawlTool`: Advanced web scraping and content analysis
-- `TextAnalyzerTool`: NLP analysis with sentiment and entity recognition
-
-#### **Content & Communication**
-- `ContentGenerationTool`: Multi-format content creation (blogs, docs, emails)
-- `ConversationManagerTool`: Advanced dialogue management
-
-#### **Project & Workflow Management**
-- `ProjectManagementTool`: Full project lifecycle management
-- `ProjectValidationTool`: Automated project validation and quality checks
-- `BlueprintExecutionTool`: Workflow automation and process execution
-- `RequirementsAnalysisTool`: Automated requirements gathering and analysis
-- `ToolGeneratorTool`: Dynamic tool creation and customization
-
-#### **File & System Operations**
-- `FileManagerTool`: Complete file system operations with safety checks
-- `FilesystemTool`: Advanced file system navigation and management
-- `ReadTool`: Intelligent file reading with format detection
-- `WriteTool`: Smart file writing with backup and validation
-- `GrepTool`: Advanced search with regex and pattern matching
-
-#### **Mathematical & Scientific**
-- `AdvancedMathTool`: Complex mathematical computations and analysis
-- `CalculatorTool`: Mathematical calculations with expression parsing
-
-Creating custom tools:
-
-```python
-from metis_agent.tools.base import BaseTool
-from metis_agent.tools.registry import register_tool
-
-class MyTool(BaseTool):
-    name = "my_tool"
-    description = "Custom tool for specific tasks"
-    
-    def can_handle(self, task):
-        # Determine if this tool can handle the task
-        return "specific task" in task.lower()
-        
-    def execute(self, task):
-        # Execute the task
-        return f"Task executed: {task}"
-
-# Register the tool
-register_tool("my_tool", MyTool)
-```
-
-### API Key Management
-
-Secure storage and retrieval of API keys:
-
-```python
-from metis_agent.auth.api_key_manager import APIKeyManager
-
-key_manager = APIKeyManager()
-key_manager.set_key("openai", "your-api-key")
-api_key = key_manager.get_key("openai")
-services = key_manager.list_services()
+# Path security
+path_validator = SecurePathValidator()
+if path_validator.is_safe_path("/path/to/file"):
+    # Proceed with file operation
+    pass
 ```
 
 ## Testing
 
-Run the comprehensive test suite:
-
+### Run Tests
 ```bash
-# Run system tests
-python metis_agent/test_system.py
+# Core tests
+python -m pytest metis_agent/tests/ -v
 
-# Run CLI tests
-python metis_agent/test_cli.py
+# Security tests  
+python -m pytest metis_agent/tests/security/ -v
+
+# Tool tests
+python -m pytest metis_agent/tools/tests/ -v
+
+# Integration tests
+python test_comprehensive_system.py
 ```
 
-## Advanced Usage
-
-### Session Management
-
-Maintain context across multiple interactions:
-
+### Example Test
 ```python
-agent = SingleAgent()
+#!/usr/bin/env python3
+"""
+Test Metis Agent Functionality
+"""
+import pytest
+from metis_agent import SingleAgent
 
-# First query
-response1 = agent.process_query(
-    "What are the main types of machine learning?",
-    session_id="user123"
-)
+def test_basic_agent_creation():
+    """Test basic agent creation and configuration"""
+    agent = SingleAgent()
+    assert agent is not None
+    
+def test_query_processing():
+    """Test basic query processing"""
+    agent = SingleAgent()
+    response = agent.process_query("Hello!")
+    assert isinstance(response, str)
+    assert len(response) > 0
 
-# Follow-up query (uses context from first query)
-response2 = agent.process_query(
-    "Can you explain supervised learning in more detail?",
-    session_id="user123"
-)
+def test_memory_system():
+    """Test memory system functionality"""
+    agent = SingleAgent(use_titans_memory=True)
+    
+    # First interaction
+    response1 = agent.process_query("My name is Alice")
+    
+    # Second interaction - should remember
+    response2 = agent.process_query("What's my name?")
+    assert "alice" in response2.lower()
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
 ```
 
-### Tool Selection
+## Configuration
 
-Specify which tool to use for a query:
+### Environment Configuration
+```bash
+# .env file
+GROQ_API_KEY=your_groq_key_here
+OPENAI_API_KEY=your_openai_key_here
+ANTHROPIC_API_KEY=your_anthropic_key_here
+GOOGLE_API_KEY=your_google_key_here
+E2B_API_KEY=your_e2b_key_here
+FIRECRAWL_API_KEY=your_firecrawl_key_here
+```
 
+### Agent Configuration
 ```python
-agent = SingleAgent()
+from metis_agent.core.agent_config import AgentConfig
 
-# Use a specific tool
-response = agent.process_query(
-    "Generate a Python function to sort a list",
-    tool_name="CodeGenerationTool"
-)
+config = AgentConfig()
+
+# LLM Configuration
+config.set_llm_provider('groq')
+config.set_llm_model('llama-3.1-8b-instant')
+
+# Memory Configuration
+config.set_memory_enabled(True)
+config.set_titans_memory(True)
+config.set_max_context_length(4000)
+
+# Session Configuration
+config.set_session_timeout(3600)
+config.set_auto_save(True)
+
+# Security Configuration
+config.set_secure_mode(True)
 ```
 
-### Memory Insights
+## Documentation
 
-Get insights about the agent's memory:
+### Core Documentation
+- [Installation Guide](docs/installation.md)
+- [Quick Start Tutorial](docs/quickstart.md)
+- [API Reference](docs/api_reference.md)
+- [Tool Development Guide](docs/tool_development.md)
+- [Security Implementation](docs/security.md)
 
-```python
-agent = SingleAgent(use_titans_memory=True)
-
-# Process some queries
-agent.process_query("What is machine learning?", session_id="user123")
-agent.process_query("Explain neural networks", session_id="user123")
-
-# Get memory insights
-insights = agent.get_memory_insights()
-print(insights)
-```
+### Advanced Guides
+- [Custom Agent Creation](docs/custom_agents.md)
+- [Memory System Configuration](docs/memory_management.md)
+- [Multi-LLM Setup](docs/llm_configuration.md)
+- [Blueprint System](docs/blueprints.md)
+- [Enterprise Deployment](docs/enterprise.md)
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Development Setup
+```bash
+# Clone repository
+git clone https://github.com/metisos/metis-agent.git
+cd metis-agent
+
+# Install in development mode
+pip install -e .[dev,security]
+
+# Run tests
+python -m pytest tests/ -v
+
+# Format code
+black metis_agent/
+isort metis_agent/
+flake8 metis_agent/
+```
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+Apache License 2.0 - see [LICENSE](LICENSE) file for details.
 
-## Contact & Links
+## Support
 
-- **PyPI Package**: [https://pypi.org/project/metis-agent/](https://pypi.org/project/metis-agent/)
-- **Starter Templates**: [https://github.com/metis-analytics/metis-starter](https://github.com/metis-analytics/metis-starter)
-- **Documentation**: [https://github.com/metis-analytics/metis-agent/wiki](https://github.com/metis-analytics/metis-agent/wiki)
-- **Issues & Support**: [https://github.com/metis-analytics/metis-agent/issues](https://github.com/metis-analytics/metis-agent/issues)
-- **Discussions**: [https://github.com/metis-analytics/metis-agent/discussions](https://github.com/metis-analytics/metis-agent/discussions)
+- **Documentation**: [GitHub Wiki](https://github.com/metisos/metis-agent/wiki)
+- **Issues**: [GitHub Issues](https://github.com/metisos/metis-agent/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/metisos/metis-agent/discussions)
+- **Email**: support@metisos.com
+
+## Roadmap
+
+### Upcoming Features (v0.15.0+)
+- **Enhanced Security**: Advanced threat detection and prevention
+- **Multi-Agent Orchestration**: Coordinate multiple specialized agents
+- **Plugin Ecosystem**: Marketplace for community tools and extensions
+- **GUI Interface**: Desktop and web-based management interfaces
+- **Enterprise Features**: RBAC, audit trails, compliance reporting
+- **Performance Optimization**: Faster execution and reduced memory usage
 
 ---
 
-<p align="center">
-  <strong>Metis Agent - Building Intelligent AI Systems</strong>
-</p>
+**Metis Agent v0.14.0** - Building the future of AI agent development with security, intelligence, and enterprise-grade reliability.
