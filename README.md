@@ -39,15 +39,8 @@ A comprehensive, enterprise-grade framework for building intelligent AI agents w
 pip install metis-agent
 ```
 
-### Development Install
-```bash
-pip install metis-agent[dev,security]
-```
 
-### All Features
-```bash
-pip install metis-agent[dev,security,local-models,docs]
-```
+
 
 ## Quick Start
 
@@ -206,9 +199,9 @@ config.set_llm_model('llama3.1:8b')
 Check out our comprehensive examples in the `examples/` directory:
 
 ### Example Files
-- **`01_quick_start.py`** - Get started in seconds with a working agent
-- **`02_advanced_configuration.py`** - Full agent customization with names, memory, and LLM settings  
-- **`03_custom_tools.py`** - Create custom tools and specialized agents
+- **`quick_start.py`** - Get started in seconds with a working agent
+- **`configure_agnet.py`** - Full agent customization with names, memory, and LLM settings  
+- **`custom_tools.py`** - Create custom tools and specialized agents
 
 ### CLI Interface
 Metis Agent also includes a powerful command-line interface:
@@ -221,15 +214,12 @@ metis --help
 # Interactive chat
 metis chat
 
-# Process single queries
-metis run "Your query here"
-
 # Agent management
 metis agent create "MyAgent"
 metis agent list
 ```
 
-See `CLI_REFERENCE.md` for complete command documentation.
+See `CLI_Documentation.md` for complete command documentation.
 
 ### Running the Examples
 
@@ -238,13 +228,13 @@ See `CLI_REFERENCE.md` for complete command documentation.
 cd metis_agent_public/examples
 
 # Quick start - minimal setup
-python 01_quick_start.py
+python quick_start.py
 
 # Advanced configuration - custom agent setup  
-python 02_advanced_configuration.py
+python advanced_configuration.py
 
 # Custom tools - build specialized agents
-python 03_custom_tools.py
+python custom_tools.py
 ```
 
 ### Basic Agent Creation
@@ -380,22 +370,9 @@ if path_validator.is_safe_path("/path/to/file"):
     pass
 ```
 
-## Testing
 
-### Run Tests
-```bash
-# Core tests
-python -m pytest metis_agent/tests/ -v
 
-# Security tests  
-python -m pytest metis_agent/tests/security/ -v
 
-# Tool tests
-python -m pytest metis_agent/tools/tests/ -v
-
-# Integration tests
-python test_comprehensive_system.py
-```
 
 ### Example Test
 ```python
@@ -471,19 +448,6 @@ config.set_secure_mode(True)
 
 ## Documentation
 
-### Core Documentation
-- [Installation Guide](docs/installation.md)
-- [Quick Start Tutorial](docs/quickstart.md)
-- [API Reference](docs/api_reference.md)
-- [Tool Development Guide](docs/tool_development.md)
-- [Security Implementation](docs/security.md)
-
-### Advanced Guides
-- [Custom Agent Creation](docs/custom_agents.md)
-- [Memory System Configuration](docs/memory_management.md)
-- [Multi-LLM Setup](docs/llm_configuration.md)
-- [Blueprint System](docs/blueprints.md)
-- [Enterprise Deployment](docs/enterprise.md)
 
 ## Contributing
 
@@ -530,4 +494,4 @@ Apache License 2.0 - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Metis Agent v0.14.0** - Building the future of AI agent development with security, intelligence, and enterprise-grade reliability.
+**Metis Agents v0.14.0** - Building the future of AI agent development with security, intelligence, and enterprise-grade reliability.
